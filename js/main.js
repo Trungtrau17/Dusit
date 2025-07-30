@@ -11,96 +11,7 @@
   let isMenuJustClosed = false
   const scrollVelocityThreshold = 0.5; // Tốc độ scroll tối thiểu (px/ms)
   const minScrollDistance = 50;
-  // ✅ WINDOWS SCALING AUTO-DETECTION & COMPENSATION
 
-function detectAndCompensateScaling() {
-  const dpr = window.devicePixelRatio;
-  const userAgent = navigator.userAgent;
-  const isWindows = userAgent.indexOf('Windows') !== -1;
-  
-  // Log scaling info
-  console.log('🖥️ Display Scaling Info:', {
-    devicePixelRatio: dpr,
-    scaling: Math.round(dpr * 100) + '%',
-    platform: isWindows ? 'Windows' : 'Other',
-    resolution: screen.width + 'x' + screen.height,
-    viewport: window.innerWidth + 'x' + window.innerHeight
-  });
-  
-  if (isWindows) {
-    let compensationFactor = 1;
-    let logMessage = '';
-    
-    if (dpr === 1.25) {
-      // 125% scaling - đồng nghiệp
-      compensationFactor = 1.05;
-      logMessage = '🔧 Applied 125% scaling compensation (+5%)';
-      
-      // Specific adjustments cho 125%
-      $('.site-header .site-logo img').css('height', '70px');
-      $('.site-hero-inner .heading').css('font-size', '52px');
-      $('.book-btn').css({
-        'padding': '16px 22px',
-        'font-size': '13px'
-      });
-      
-    } else if (dpr === 1.5) {
-      // 150% scaling - máy bạn
-      compensationFactor = 0.95;
-      logMessage = '🔧 Applied 150% scaling compensation (-5%)';
-      
-      // Specific adjustments cho 150%
-      $('.site-header .site-logo img').css('height', '68px');
-      $('.site-hero-inner .heading').css('font-size', '50px');
-      $('.book-btn').css({
-        'padding': '14px 20px',
-        'font-size': '12px'
-      });
-      
-    } else if (dpr === 1.75) {
-      // 175% scaling
-      compensationFactor = 0.90;
-      logMessage = '🔧 Applied 175% scaling compensation (-10%)';
-      
-      $('.site-header .site-logo img').css('height', '72px');
-      $('.site-hero-inner .heading').css('font-size', '54px');
-    }
-    
-    // Apply zoom compensation
-    if (compensationFactor !== 1) {
-      document.body.style.zoom = compensationFactor;
-      console.log(logMessage);
-      
-      // Add class để track compensation
-      $('body').addClass('scaling-compensated scaling-' + Math.round(dpr * 100));
-    }
-  }
-  
-  // Add debug info to page (remove in production)
-  if (window.location.hostname.includes('ngrok') || window.location.hostname === 'localhost') {
-    const debugInfo = $(`
-      <div style="position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; font-size: 12px; z-index: 10000; border-radius: 5px;">
-        <div>DPR: ${dpr} (${Math.round(dpr * 100)}%)</div>
-        <div>Screen: ${screen.width}x${screen.height}</div>
-        <div>Viewport: ${window.innerWidth}x${window.innerHeight}</div>
-        <div>Zoom: ${document.body.style.zoom || '1'}</div>
-      </div>
-    `);
-    $('body').append(debugInfo);
-    
-    // Auto hide after 5 seconds
-    setTimeout(() => debugInfo.fadeOut(), 5000);
-  }
-}
-
-// Run on load và resize
-$(document).ready(function() {
-  detectAndCompensateScaling();
-});
-
-$(window).resize(function() {
-  detectAndCompensateScaling();
-});
 
   $(document).ready(function() {
     // Reset header state
@@ -129,101 +40,20 @@ $(window).resize(function() {
     });
     
   });
-  // Detect DevTools
-let devtools = {
-  open: false,
-  orientation: null
-};
-
-function detectDevTools() {
-  const threshold = 160;
+function getScrollbarWidth() {
+  const div = document.createElement('div');
+  div.style.width = '100px';
+  div.style.height = '100px';
+  div.style.overflow = 'scroll';
+  div.style.position = 'absolute';
+  div.style.top = '-9999px';
+  document.body.appendChild(div);
   
-  setInterval(() => {
-    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-    
-    if (heightThreshold || widthThreshold) {
-      if (!devtools.open) {
-        devtools.open = true;
-        $('body').addClass('devtools-open');
-        
-        // ✅ Force enable scroll khi DevTools mở
-        if (typeof lenis !== 'undefined') {
-          lenis.start();
-        }
-        
-        // Reset any scroll locks
-        $(window).off('wheel.menuOpen touchmove.menuOpen');
-        $(document).off('keydown.menuOpen');
-        
-        $('html, body').css({
-          'overflow': 'auto',
-          'position': 'static',
-          'padding-right': '0'
-        });
-      }
-    } else {
-      if (devtools.open) {
-        devtools.open = false;
-        $('body').removeClass('devtools-open');
-      }
-    }
-  }, 500);
+  const scrollbarWidth = div.offsetWidth - div.clientWidth;
+  document.body.removeChild(div);
+  
+  return scrollbarWidth;
 }
-  $(window).resize(function() {
-  const windowWidth = $(window).width();
-  
-  if (windowWidth < 1200) {
-    // Mobile/Tablet mode - simplify scroll
-    console.log('🔧 Responsive mode detected, adjusting scroll...');
-    
-    // Reset HTML/body overflow
-    $('html, body').css({
-      'overflow': 'auto',
-      'overflow-x': 'hidden',
-      'overflow-y': 'auto',
-      'position': 'static',
-      'height': 'auto',
-      'width': '100%'
-    });
-    
-    // Restart Lenis with simplified settings
-    lenis.stop();
-    setTimeout(() => {
-      lenis.start();
-      lenis.resize();
-    }, 100);
-    
-    // Force remove any conflicting classes
-    $('body').removeClass('devtools-open');
-    $('.lenis').css({
-      'overflow': 'auto',
-      'height': 'auto'
-    });
-    
-  } else {
-    // Desktop mode - normal scroll
-    console.log('🖥️ Desktop mode detected');
-    lenis.resize();
-  }
-});
-  // Start detection
-  detectDevTools();
-  function getScrollbarWidth() {
-    const outer = document.createElement('div');
-    outer.style.visibility = 'hidden';
-    outer.style.overflow = 'scroll';
-    outer.style.msOverflowStyle = 'scrollbar';
-    document.body.appendChild(outer);
-    
-    const inner = document.createElement('div');
-    outer.appendChild(inner);
-    
-    const scrollbarWidth = (outer.offsetWidth - inner.offsetWidth);
-    outer.parentNode.removeChild(outer);
-    
-    return scrollbarWidth;
-  }
   
   // Optimized throttle
   function throttle(func, limit) {
@@ -304,7 +134,7 @@ function showHeader() {
   if (!isMobile) {
     // Desktop - use Lenis
       lenis = new Lenis({
-      duration: 1.5, // thời gian kéo dài scroll (cao hơn = chậm hơn)
+      duration: 2, // thời gian kéo dài scroll (cao hơn = chậm hơn)
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smooth: true,
       mouseMultiplier: 1,
@@ -467,36 +297,70 @@ $(window).resize(function() {
   $('.site-menu-toggle').click(function(){
     var $this = $(this);
     if ($('body').hasClass('menu-open')) {
+      // ✅ FIX: Close menu - lưu position trước khi thay đổi
       $this.removeClass('open');
       $('.js-site-navbar').fadeOut(400);
       $('body').removeClass('menu-open');
       $('html').removeClass('menu-open');
       isMenuOpen = false;
-      isMenuJustClosed = true; // Đánh dấu menu vừa đóng
-      $('body').removeClass('menu-open');
-$('html').removeClass('menu-open');
+      isMenuJustClosed = true;
 
-// ✅ RESET padding
-$('body').css('padding-right', '');
-$('.site-header').css('padding-right', '');
-$('.container-fluid').css('padding-right', '');
-      $(window).off('wheel.menuOpen touchmove.menuOpen');
+      // ✅ RESET padding
+      $('.navbar-nav').css('padding-right', '');
+      $('.container-fluid').css('padding-right', '');
+      
+      // ✅ FIX: Remove event listeners TRƯỚC khi restore scroll
+      $(window).off('wheel.menuOpen touchmove.menuOpen scroll.menuOpen');
       $(document).off('keydown.menuOpen');
-      // window.scrollTo(0, scrollPosition);
 
-      lenis.start();
+      if(!isMobile && lenis){
+        // ✅ FIX: Cải thiện logic restore scroll position
+        const currentBodyTop = $('body').css('top');
+        let scrollY = 0;
+        
+        if (currentBodyTop && currentBodyTop !== 'auto') {
+          scrollY = Math.abs(parseInt(currentBodyTop) || 0);
+        }
+        
+        // ✅ Reset styles trước khi scroll
+        $('body').css({
+          'position': '',
+          'top': '',
+          'width': ''
+        });
+        $('html').css('overflow', '');
+        
+        // ✅ Đảm bảo scrollY hợp lệ trước khi áp dụng
+        if (scrollY > 0 && scrollY < document.documentElement.scrollHeight) {
+          window.scrollTo(0, scrollY);
+        }
+        
+        // ✅ Restart Lenis sau khi đã restore position
+        setTimeout(() => {
+          lenis.start();
+        }, 50);
+        
+      } else {
+        // ✅ Mobile: Reset scroll đơn giản
+        $('body').css({
+          'position': 'static',
+          'top': 'auto',
+          'width': 'auto',
+          'overflow': 'auto',
+          'overflow-x': 'hidden'
+        });
+        
+        $('html').css({
+          'overflow': 'auto',
+          'overflow-x': 'hidden',
+        });
+      }
+      
       updateHeaderState();
       
-      const currentScroll = lenis ? lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop);
-      isScrolled = currentScroll > 200;
-      if(!$('.site-header').is(':hover')){
-        if (isScrolled) {
-          $('.js-site-header').addClass('scrolled');
-        } else {
-          $('.js-site-header').removeClass('scrolled');
-      }
-      }
+      
     } else {
+      // ✅ FIX: Open menu - cải thiện logic lưu position
       $this.addClass('open');
       $('.js-site-navbar').fadeIn(400);
       $('body').addClass('menu-open');
@@ -505,31 +369,62 @@ $('.container-fluid').css('padding-right', '');
       isMenuOpen = true;
       isMenuJustClosed = false;
       const scrollbarWidth = getScrollbarWidth();
-$('body').css('padding-right', scrollbarWidth + 'px');
-$('.site-header').css('padding-right', scrollbarWidth + 'px');
-$('.container-fluid').css('padding-right', scrollbarWidth + 'px');
-      // Lưu vị trí scroll hiện tại
-    // scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-    // KHÓA scroll bằng cách chặn các sự kiện scroll
-    $(window).on('wheel.menuOpen', function(e) {
-      e.preventDefault();
-      return false;
-    });
-    $(window).on('touchmove.menuOpen', function(e) {
-      e.preventDefault();
-      return false;
-    });
-    $(document).on('keydown.menuOpen', function(e) {
-      // Disable arrow keys, page up/down, space, home, end
-      if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-        e.preventDefault();
-        return false;
+      $('.navbar-nav').css('padding-right', scrollbarWidth + 'px');
+      $('.container-fluid').css('padding-right', scrollbarWidth + 'px');
+      
+      // Lock scroll khác nhau cho desktop/mobile
+      if(!isMobile && lenis){
+        // Lấy scroll position CHÍNH XÁC trước khi lock
+        const scrollPosition = lenis.scroll || window.pageYOffset || document.documentElement.scrollTop || 0;
+        
+        // Lock events trước khi stop Lenis
+        $(window).on('wheel.menuOpen', function(e) {
+          e.preventDefault();
+          return false;
+        });
+        $(window).on('touchmove.menuOpen', function(e) {
+          e.preventDefault();
+          return false;
+        });
+        $(document).on('keydown.menuOpen', function(e) {
+          if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+            e.preventDefault();
+            return false;
+          }
+        });
+        
+        // Stop Lenis sau khi đã lock events
+        lenis.stop();
+        
+        // Áp dụng fixed position với scroll position chính xác
+        $('body').css({
+          'position': 'fixed',
+          'top': `-${scrollPosition}px`,
+          'width': '100%'
+        });
+        $('html').css('overflow', 'hidden');
+        
+      } else {
+        // Mobile: Lock scroll bằng CSS và events
+        $('body').css('overflow', 'hidden');
+        $('html').css('overflow', 'hidden');
+        
+        // Prevent scroll events trên mobile
+        $(window).on('scroll.menuOpen touchmove.menuOpen wheel.menuOpen', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          return false;
+        });
+        
+        $(document).on('keydown.menuOpen', function(e) {
+          if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+            e.preventDefault();
+            return false;
+          }
+        });
       }
-    });
-    lenis.stop();
-    updateHeaderState();
+      updateHeaderState();
     }
-    
   });
   // ✅ THÊM click overlay để đóng menu
 $('.menu-overlay').click(function() {
