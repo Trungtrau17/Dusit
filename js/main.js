@@ -54,6 +54,30 @@ function getScrollbarWidth() {
   
   return scrollbarWidth;
 }
+function updateMenuOverlay() {
+  const header = document.querySelector('.site-header');
+  const navbar = document.querySelector('.site-navbar');
+  const overlay = document.querySelector('.menu-overlay');
+  
+  if (header && navbar && overlay) {
+    // ✅ Force recalculate bằng cách trigger reflow
+    header.offsetHeight;
+    navbar.offsetWidth;
+    
+    const headerHeight = header.offsetHeight;
+    
+    
+    // ✅ Cập nhật overlay position
+    overlay.style.top = `${headerHeight}px`;
+  
+    
+    
+  }
+}
+
+// Cập nhật khi resize
+$(window).resize(updateMenuOverlay);
+$(document).ready(updateMenuOverlay);
   
   // Optimized throttle
   function throttle(func, limit) {
