@@ -11,11 +11,45 @@
   let isMenuJustClosed = false
   const scrollVelocityThreshold = 0.5; // Tốc độ scroll tối thiểu (px/ms)
   const minScrollDistance = 50;
-
-
+  let isMobile = $(window).width() < 1200;
+  let lenis = null;
+  let rafId = null;
   $(document).ready(function() {
+    
+    function handleOverlayVisibility() {
+    const isMobileOrTablet = $(window).width() <= 1024;
+    
+    if (isMobileOrTablet) {
+      // ✅ Force show overlay on mobile/tablet
+      $('.image-container .overlay-content').css({
+        'max-height': 'clamp(300px, 70vh, 400px)',
+        'opacity': '1',
+        'transition': 'none'
+      });
+      
+      $('.image-container .overlay-text').css({
+        'transform': 'translateY(0)',
+        'transition': 'none'
+      });
+    } else {
+      // ✅ Reset to hover behavior on desktop
+      $('.image-container .overlay-content').css({
+        'max-height': '',
+        'opacity': '',
+        'transition': ''
+      });
+      
+      $('.image-container .overlay-text').css({
+        'transform': '',
+        'transition': ''
+      });
+    }
+  }
+  handleOverlayVisibility();
+  $(window).resize(handleOverlayVisibility);
     // Reset header state
     isHeaderHidden = false;
+    isInitialized = false; 
     $('.js-site-header').removeClass('header-hidden');
     
     // Initialize baseline state
@@ -23,6 +57,7 @@
       $('.js-site-header').removeClass('scrolled');
       $('.site-header').css('transition', 'all 0.7s ease-in-out');
       $(window).trigger('resize');
+      initializeScroll();
     }, 100);
     const criticalImages = [
       'images/Deluxe.webp',
@@ -101,6 +136,7 @@ $(document).ready(updateMenuOverlay);
       });
       $('.js-site-header').addClass('header-hidden');
       isHeaderHidden = true;
+      console.log('✅ Header hidden successfully');
     }
   }
 
@@ -108,10 +144,11 @@ function showHeader() {
   if (isHeaderHidden) {
       $('.js-site-header').css({
         'transform': 'translateY(0)',
-        'transition': 'transform 0.s ease-in-out'
+        'transition': 'transform 0.7s ease-in-out'
       });
       $('.js-site-header').removeClass('header-hidden');
       isHeaderHidden = false;
+      console.log('✅ Header shown successfully');
     }
   }
 
@@ -128,6 +165,13 @@ function showHeader() {
   function handleHeaderScroll(currentScrollY) {
     const currentTime = Date.now();
     
+    console.log('🎯 handleHeaderScroll called with:', {
+    currentScrollY: currentScrollY,
+    isMenuOpen: isMenuOpen,
+    minScrollDistance: minScrollDistance,
+    isHeaderHidden: isHeaderHidden,
+    lastScrollY: lastScrollY
+  });
     isScrolled = currentScrollY > 200;
     
     if (!isMenuOpen && currentScrollY > minScrollDistance) {
@@ -135,14 +179,26 @@ function showHeader() {
       const scrollDirection = currentScrollY - lastScrollY;
       const isActuallyScrolling = Math.abs(scrollDirection) > 0.5;
       
+      const velocityThreshold = isMobile ? 0.2 : scrollVelocityThreshold;
+      console.log('🔍 Scroll analysis:', {
+      scrollVelocity: scrollVelocity,
+      scrollDirection: scrollDirection,
+      velocityThreshold: velocityThreshold,
+      isActuallyScrolling: isActuallyScrolling,
+      isMobile: isMobile,
+      willTrigger: scrollVelocity > velocityThreshold && isActuallyScrolling
+    });
       if (scrollVelocity > scrollVelocityThreshold && isActuallyScrolling) {
         if (scrollDirection > 0) {
+          console.log('⬇️ Hiding header - scroll down detected');
           hideHeader();
         } else if (scrollDirection < 0) {
+          console.log('⬆️ Showing header - scroll up detected');
           showHeader();
         }
       }
     } else if (currentScrollY <= minScrollDistance) {
+      console.log('🔝 At top - showing header');
       showHeader();
     }
     
@@ -151,77 +207,157 @@ function showHeader() {
   }
 
   const throttledHeaderScroll = throttle(handleHeaderScroll, 8);
-  let lenis;
-  let isMobile = $(window).width() < 1200;
+  
   // Thêm Lenis smooth scroll
   function initializeScroll() {
+    console.log('🔄 Initializing scroll system...');
+  console.log('isMobile:', isMobile);
+  console.log('Lenis available:', typeof Lenis);
+  
+  // Cleanup existing
+  if (lenis && typeof lenis.destroy === 'function') {
+    try {
+      lenis.destroy();
+      console.log('✅ Previous Lenis instance destroyed');
+    } catch (e) {
+      console.warn('⚠️ Error destroying lenis:', e);
+    }
+  }
+  lenis = null;
+  
+  if (rafId) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
   if (!isMobile) {
-    // Desktop - use Lenis
-      lenis = new Lenis({
-      duration: 2, // thời gian kéo dài scroll (cao hơn = chậm hơn)
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
-      mouseMultiplier: 1,
-      smoothTouch: false,
-      touchMultiplier: 1.5,
-      infinite: false,
-      lerp: 0.1, // Thêm lerp để mượt hơn
+    // ✅ DESKTOP: Use Lenis (existing code)
+    console.log('🖥️ Desktop detected - initializing Lenis...');
+    
+    try {
+      if (typeof Lenis === 'undefined') {
+        throw new Error('Lenis constructor not available');
+      }
       
-      wrapper: window, // Hoặc document.body
-      content: document.documentElement,
-      wheelEventsTarget: window, // Thêm để tối ưu wheel events
-      syncTouch: true,
-      normalizeWheel: true,
-      // Thêm option để tương thích với fixed elements
-      gestureDirection: 'vertical',
-      smoothWheel: true,
-      autoResize: true,
-      prevent: (node) => node.classList.contains('no-lenis')
-    });
+      lenis = new Lenis({
+        duration: 2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smooth: true,
+        mouseMultiplier: 1,
+        smoothTouch: false,
+        touchMultiplier: 1.5,
+        infinite: false,
+        lerp: 0.1,
+        wrapper: window,
+        content: document.documentElement,
+        wheelEventsTarget: window,
+        syncTouch: true,
+        normalizeWheel: true,
+        gestureDirection: 'vertical',
+        smoothWheel: true,
+        autoResize: true,
+        prevent: (node) => node.classList.contains('no-lenis')
+      });
 
-  // Lenis scroll handler thay thế jQuery
-  lenis.on('scroll', (e) => {
-    const scrollY = e.scroll;
+      if (!lenis || typeof lenis.on !== 'function') {
+        throw new Error('Lenis instance creation failed');
+      }
+
+      console.log('✅ Lenis instance created successfully:', lenis);
+
+      lenis.on('scroll', (e) => {
+        const scrollY = e.scroll || 0;
+        const currentTime = Date.now();
+        
+        if (!isInitialized) {
+          lastScrollY = scrollY;
+          lastScrollTime = currentTime;
+          isInitialized = true;
+          console.log('📍 Lenis initialized with scroll position:', scrollY);
+          return;
+        }
+        
+        isScrolled = scrollY > 200;
+        
+        if (!isMenuOpen) {
+          updateHeaderState();
+        }
+        
+        throttledHeaderScroll(scrollY);
+      });
+
+      function raf(time) {
+        if (lenis && typeof lenis.raf === 'function') {
+          try {
+            lenis.raf(time);
+            rafId = requestAnimationFrame(raf);
+          } catch (error) {
+            console.error('❌ Lenis RAF error:', error);
+            initializeNativeScroll();
+            return;
+          }
+        } else {
+          console.warn('⚠️ Lenis not available in RAF, falling back');
+          initializeNativeScroll();
+          return;
+        }
+      }
+      
+      rafId = requestAnimationFrame(raf);
+      console.log('✅ Lenis RAF loop started');
+      
+    } catch (error) {
+      console.error('❌ Failed to initialize Lenis:', error);
+      console.log('🔄 Falling back to native scroll');
+      initializeNativeScroll();
+    }
+  } else {
+    // ✅ MOBILE: Use native scroll with proper header logic
+    console.log('📱 Mobile detected - using native scroll with header logic');
+    initializeNativeScroll();
+  }
+  
+  setTimeout(() => {
+    console.log('🔍 Final check - lenis variable:', typeof lenis);
+    console.log('🔍 Final check - lenis instance:', lenis);
+  }, 500);
+}
+function initializeNativeScroll() {
+  console.log('🔄 Initializing native scroll with header logic...');
+  $(window).off('scroll.main');
+  
+  $(window).on('scroll.main', function() {
+    const scrollY = $(this).scrollTop();
     const currentTime = Date.now();
-    // Khởi tạo lastScrollY trong lần scroll đầu tiên
+    
+    console.log('📱 Mobile scroll event:', {
+      scrollY: scrollY,
+      isInitialized: isInitialized,
+      isMenuOpen: isMenuOpen,
+      currentTime: currentTime
+    });
     if (!isInitialized) {
       lastScrollY = scrollY;
       lastScrollTime = currentTime;
       isInitialized = true;
-      return; // Skip processing cho lần đầu tiên
+      console.log('📍 Native scroll initialized with position:', scrollY);
+      return;
     }
-    // Update scroll state
+    console.log('📱 Processing scroll after initialization...');
+    // ✅ CRITICAL: Update isScrolled for mobile
     isScrolled = scrollY > 200;
     
-    // Header state update
+    // ✅ CRITICAL: Update header state for mobile
     if (!isMenuOpen) {
       updateHeaderState();
     }
-    // 3. Header hide/show logic
+    
+    // ✅ CRITICAL: Apply header hide/show logic on mobile
     throttledHeaderScroll(scrollY);
-
   });
+  
+  console.log('✅ Native scroll with header logic initialized');
+}
 
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-  }
-  else{
-    // Mobile - use native scroll
-    $(window).on('scroll', function() {
-      const scrollY = $(this).scrollTop();
-      // Handle native scroll events
-      isScrolled = scrollY > 200;
-      if (!isMenuOpen) {
-        updateHeaderState();
-      }
-      throttledHeaderScroll(scrollY);
-    });
-  }}
-  // Initialize based on screen size
-  initializeScroll();
   // Reinitialize on resize
 $(window).resize(function() {
   const wasMobile = isMobile;
@@ -229,11 +365,23 @@ $(window).resize(function() {
   
   if (wasMobile !== isMobile) {
     // Screen size category changed
-    if (lenis) {
-      lenis.destroy();
-      lenis = null;
+    isInitialized = false;
+    if (lenis && typeof lenis.destroy === 'function') {
+      try {
+        lenis.destroy();
+        console.log('✅ Lenis destroyed on resize');
+      } catch (e) {
+        console.warn('Error destroying lenis on resize:', e);
+      }
     }
-    $(window).off('scroll');
+    lenis = null;
+    
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+    
+    $(window).off('scroll.main');
     
     setTimeout(() => {
       initializeScroll();
@@ -306,7 +454,13 @@ $(window).resize(function() {
       $('.js-site-header').addClass('scrolled');
       return;
     }
-    const currentScroll = lenis ? lenis.scroll : (window.pageYOffset || document.documentElement.scrollTop);
+    let currentScroll;
+    if (lenis && !isMobile) {
+      currentScroll = lenis.scroll;
+    } else {
+      // ✅ Native scroll for mobile
+      currentScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
+    }
     const actuallyScrolled = currentScroll > 200;
     isScrolled = actuallyScrolled;
     // CSS sẽ tự handle logo transition
@@ -337,7 +491,7 @@ $(window).resize(function() {
       $(window).off('wheel.menuOpen touchmove.menuOpen scroll.menuOpen');
       $(document).off('keydown.menuOpen');
 
-      if(!isMobile && lenis){
+      if(!isMobile && lenis && typeof lenis.start === 'function'){
         // ✅ FIX: Cải thiện logic restore scroll position
         const currentBodyTop = $('body').css('top');
         let scrollY = 0;
@@ -361,10 +515,25 @@ $(window).resize(function() {
         
         // ✅ Restart Lenis sau khi đã restore position
         setTimeout(() => {
-          lenis.start();
-        }, 50);
+        if (lenis && typeof lenis.start === 'function') {
+          try {
+            lenis.start();
+          } catch (e) {
+            console.warn('Error starting lenis:', e);
+          }
+        }
+      }, 50);
         
       } else {
+        const currentBodyTop = $('body').css('top');
+      let scrollY = 0;
+      
+      // ✅ Get stored scroll position from body top
+      if (currentBodyTop && currentBodyTop !== 'auto') {
+        scrollY = Math.abs(parseInt(currentBodyTop) || 0);
+      }
+      
+      console.log('Mobile close menu - restoring scroll to:', scrollY);
         // ✅ Mobile: Reset scroll đơn giản
         $('body').css({
           'position': 'static',
@@ -378,6 +547,11 @@ $(window).resize(function() {
           'overflow': 'auto',
           'overflow-x': 'hidden',
         });
+        if (scrollY > 0) {
+        window.scrollTo(0, scrollY);
+        document.documentElement.scrollTop = scrollY;
+        document.body.scrollTop = scrollY;
+      }
       }
       
       updateHeaderState();
@@ -392,9 +566,9 @@ $(window).resize(function() {
       
       isMenuOpen = true;
       isMenuJustClosed = false;
-      const scrollbarWidth = getScrollbarWidth();
-      $('.navbar-nav').css('padding-right', scrollbarWidth + 'px');
-      $('.container-fluid').css('padding-right', scrollbarWidth + 'px');
+      // const scrollbarWidth = getScrollbarWidth();
+      // $('.navbar-nav').css('padding-right', scrollbarWidth + 'px');
+      // $('.container-fluid').css('padding-right', scrollbarWidth + 'px');
       
       // Lock scroll khác nhau cho desktop/mobile
       if(!isMobile && lenis){
@@ -429,9 +603,19 @@ $(window).resize(function() {
         $('html').css('overflow', 'hidden');
         
       } else {
-        // Mobile: Lock scroll bằng CSS và events
-        $('body').css('overflow', 'hidden');
-        $('html').css('overflow', 'hidden');
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      
+      // ✅ Apply fixed position with stored scroll
+      $('body').css({
+        'overflow': 'hidden',
+        'position': 'fixed',
+        'top': `-${currentScroll}px`,
+        'width': '100%',
+        'left': '0',
+        'right': '0'
+      });
+      $('html').css('overflow', 'hidden');
+      
         
         // Prevent scroll events trên mobile
         $(window).on('scroll.menuOpen touchmove.menuOpen wheel.menuOpen', function(e) {
@@ -568,22 +752,36 @@ accommodationSlider.owlCarousel({
   // Tắt tất cả hiệu ứng fade
   animateOut: false, // Tắt animateOut
   animateIn: false,  // Tắt animateIn
-   
+  touchDrag: true,      // ✅ Enable touch drag
+  mouseDrag: true,      // ✅ Enable mouse drag  
+  pullDrag: true,       // ✅ Enable pull drag
+  freeDrag: false, 
+  touchTreshold: 100,   // ✅ Minimum distance for touch to trigger slide
+  dotsSpeed: 400,       // ✅ Speed for dot navigation
+  dragEndSpeed: 400, 
   responsive: {
     0: {
       items: 1, // Mobile: 1 item
       margin: 20,
-      stagePadding: 30
+      stagePadding: 30,
+      touchDrag: true,     // ✅ Enable touch on mobile
+      mouseDrag: false,    // ✅ Disable mouse on mobile
+      pullDrag: true,      // ✅ Enable pull
+      dotsSpeed: 300, 
     },
     600: {
       items: 1, // Tablet: 1 item
       margin: 30,
-      stagePadding: 50
+      stagePadding: 50,
+      touchDrag: true,     // ✅ Enable touch on tablet
+      mouseDrag: true, 
     },
     1000: {
       items: 2, // Desktop: 2 items
       margin: 40,
-      stagePadding: 0
+      stagePadding: 0,
+      touchDrag: false,    // ✅ Disable touch on desktop
+      mouseDrag: true,  
     }
   }
 });
@@ -642,21 +840,38 @@ weSlider.owlCarousel({
   center: false,
   animateOut: false,
   animateIn: false,
+  touchDrag: true,      // ✅ Enable touch drag
+  mouseDrag: true,      // ✅ Enable mouse drag
+  pullDrag: true,       // ✅ Enable pull drag
+  freeDrag: false,      // ✅ Disable free drag
+  
+
+  touchTreshold: 100,   // ✅ Minimum swipe distance
+  dotsSpeed: 400,
+  dragEndSpeed: 400,
   responsive: {
     0: {
       items: 1, // Mobile: 1 item
       margin: 0,
-      smartSpeed: 1000
+      smartSpeed: 1000,
+      touchDrag: true,     // ✅ Enable touch on mobile
+      mouseDrag: false,    // ✅ Disable mouse on mobile
+      pullDrag: true,
     },
     600: {
       items: 1, // Tablet: 1 item  
       margin: 0,
-      smartSpeed: 1100
+      smartSpeed: 1100,
+      touchDrag: true,     // ✅ Enable touch on tablet
+      mouseDrag: true,
     },
     1000: {
       items: 1, // Desktop: 1 item
       margin: 0,
-      smartSpeed: 1200
+      smartSpeed: 1200,
+      touchDrag: false,
+      mouseDrag: true,
+      pullDrag: false, 
     }
   }
 });
@@ -702,8 +917,35 @@ $('.section-2 .nav-button.next').off('click').on('click', function(e) {
     delay: 0,
     offset: 120,
     mirror: false,      
-    anchorPlacement: 'top-bottom'
+    anchorPlacement: 'top-bottom',
+    disable: false, 
+    startEvent: 'DOMContentLoaded'
   });
+
+// For about.html
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('about-page');
+});
+
+// For wellness.html  
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('wellness-page');
+});
+
+// For events.html
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('events-page');
+});
+
+// For dining.html
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('dining-page');
+});
+
+// For room detail pages (superior.html, deluxe.html, junior.html, one_bedroom.html)
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.classList.add('room-detail-page');
+});
 
   
 })(jQuery);
