@@ -610,12 +610,17 @@ $(window).resize(function() {
   var $this = $(this);
   
   if ($('body').hasClass('menu-open')) {
-    // ✅ CLOSE MENU - Simple approach
-    console.log('Closing menu...');
-    
+  
     $this.removeClass('open');
     $('.js-site-navbar').fadeOut(400);
     
+    const bodyTop = $('body').css('top');
+    let scrollY = 0;
+    
+    if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
+      scrollY = Math.abs(parseInt(bodyTop) || 0);
+      console.log('Restoring scroll to:', scrollY);
+    }
     // ✅ CRITICAL: Remove all classes immediately
     $('body').removeClass('menu-open');
     $('html').removeClass('menu-open');
@@ -640,6 +645,18 @@ $(window).resize(function() {
       'right': ''
     });
     
+    if (scrollY > 0) {
+      // Multiple methods to ensure scroll restoration
+      window.scrollTo(0, scrollY);
+      document.documentElement.scrollTop = scrollY;
+      document.body.scrollTop = scrollY;
+      
+      // Force scroll after a small delay
+      setTimeout(() => {
+        window.scrollTo(0, scrollY);
+        document.documentElement.scrollTop = scrollY;
+      }, 10);
+    }
     // ✅ Restart Lenis if available
     if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
       setTimeout(() => {
@@ -654,13 +671,13 @@ $(window).resize(function() {
     
     isMenuOpen = false;
     updateHeaderState();
-    
-    console.log('✅ Menu closed, scroll should work');
+
     
   } else {
     // ✅ OPEN MENU - CSS-only approach
-    console.log('Opening menu...');
-    
+    const currentScroll = window.pageYOffset || 
+                         document.documentElement.scrollTop || 
+                         document.body.scrollTop || 0;
     if (isMobile && isHeaderHidden) {
       const headerEl = $('.js-site-header')[0];
       if (headerEl) {
@@ -675,9 +692,34 @@ $(window).resize(function() {
     $('body').addClass('menu-open');
     $('html').addClass('menu-open');
     
-    // ✅ Stop Lenis for desktop only
-    if (typeof lenis !== 'undefined' && lenis && !isMobile && typeof lenis.stop === 'function') {
-      lenis.stop();
+    
+    if (isMobile) {
+      $('body').css({
+        'position': 'fixed',
+        'top': `-${currentScroll}px`, // ✅ Store scroll position
+        'left': '0',
+        'right': '0',
+        'width': '100%',
+        'overflow': 'hidden',
+        'touch-action': 'none',
+        '-webkit-overflow-scrolling': 'auto'
+      });
+      $('html').css({
+        'overflow': 'hidden',
+        'touch-action': 'none'
+      });
+    } else {
+      // ✅ DESKTOP: Stop Lenis and apply position
+      if (typeof lenis !== 'undefined' && lenis && typeof lenis.stop === 'function') {
+        lenis.stop();
+      }
+      
+      $('body').css({
+        'position': 'fixed',
+        'top': `-${currentScroll}px`,
+        'width': '100%'
+      });
+      $('html').css('overflow', 'hidden');
     }
     
     isMenuOpen = true;
@@ -691,6 +733,13 @@ $(window).resize(function() {
 function forceCleanupMenu() {
   console.log('🔧 Force cleanup menu...');
   
+  const bodyTop = $('body').css('top');
+  let scrollY = 0;
+  
+  if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
+    scrollY = Math.abs(parseInt(bodyTop) || 0);
+    console.log('Force cleanup: restoring scroll to:', scrollY);
+  }
   // Remove all classes
   $('body').removeClass('menu-open');
   $('html').removeClass('menu-open');
@@ -717,6 +766,16 @@ function forceCleanupMenu() {
     'right': ''
   });
   
+  if (scrollY > 0) {
+    window.scrollTo(0, scrollY);
+    document.documentElement.scrollTop = scrollY;
+    document.body.scrollTop = scrollY;
+    
+    setTimeout(() => {
+      window.scrollTo(0, scrollY);
+      document.documentElement.scrollTop = scrollY;
+    }, 10);
+  }
   // Reset flags
   isMenuOpen = false;
   
