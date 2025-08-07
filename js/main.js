@@ -130,27 +130,43 @@ $(document).ready(updateMenuOverlay);
 
   function hideHeader() {
     if (!isHeaderHidden) {
+    if (isMobile) {
+      const headerEl = $('.js-site-header')[0];
+      headerEl.style.setProperty('transition', 'transform 0.7s ease-in-out', 'important');
+      headerEl.style.setProperty('transform', 'translateY(-100%)', 'important');
+    } else {
+      // ✅ DESKTOP: Keep existing approach
       $('.js-site-header').css({
         'transform': 'translateY(-100%)',
-        'transition': 'transform 0.7s ease-in-out'
+        'transition': 'transform 0.7s ease-in-out',
+        'will-change': 'transform'
       });
-      $('.js-site-header').addClass('header-hidden');
-      isHeaderHidden = true;
-      console.log('✅ Header hidden successfully');
     }
+    
+    $('.js-site-header').addClass('header-hidden');
+    isHeaderHidden = true;
   }
+}
 
 function showHeader() {
   if (isHeaderHidden) {
+    if (isMobile) {
+      const headerEl = $('.js-site-header')[0];
+      headerEl.style.setProperty('transition', 'transform 0.7s ease-in-out', 'important');
+      headerEl.style.setProperty('transform', 'translateY(0)', 'important');
+    } else {
+      // ✅ DESKTOP: Keep existing approach
       $('.js-site-header').css({
         'transform': 'translateY(0)',
-        'transition': 'transform 0.7s ease-in-out'
+        'transition': 'transform 0.7s ease-in-out',
+        'will-change': 'transform'
       });
-      $('.js-site-header').removeClass('header-hidden');
-      isHeaderHidden = false;
-      console.log('✅ Header shown successfully');
     }
+    
+    $('.js-site-header').removeClass('header-hidden');
+    isHeaderHidden = false;
   }
+}
 
   function calculateScrollVelocity(currentScrollY, currentTime) {
     const scrollDistance = Math.abs(currentScrollY - lastScrollY);
@@ -165,13 +181,6 @@ function showHeader() {
   function handleHeaderScroll(currentScrollY) {
     const currentTime = Date.now();
     
-    console.log('🎯 handleHeaderScroll called with:', {
-    currentScrollY: currentScrollY,
-    isMenuOpen: isMenuOpen,
-    minScrollDistance: minScrollDistance,
-    isHeaderHidden: isHeaderHidden,
-    lastScrollY: lastScrollY
-  });
     isScrolled = currentScrollY > 200;
     
     if (!isMenuOpen && currentScrollY > minScrollDistance) {
@@ -180,25 +189,14 @@ function showHeader() {
       const isActuallyScrolling = Math.abs(scrollDirection) > 0.5;
       
       const velocityThreshold = isMobile ? 0.2 : scrollVelocityThreshold;
-      console.log('🔍 Scroll analysis:', {
-      scrollVelocity: scrollVelocity,
-      scrollDirection: scrollDirection,
-      velocityThreshold: velocityThreshold,
-      isActuallyScrolling: isActuallyScrolling,
-      isMobile: isMobile,
-      willTrigger: scrollVelocity > velocityThreshold && isActuallyScrolling
-    });
       if (scrollVelocity > scrollVelocityThreshold && isActuallyScrolling) {
         if (scrollDirection > 0) {
-          console.log('⬇️ Hiding header - scroll down detected');
           hideHeader();
         } else if (scrollDirection < 0) {
-          console.log('⬆️ Showing header - scroll up detected');
           showHeader();
         }
       }
     } else if (currentScrollY <= minScrollDistance) {
-      console.log('🔝 At top - showing header');
       showHeader();
     }
     
@@ -210,15 +208,10 @@ function showHeader() {
   
   // Thêm Lenis smooth scroll
   function initializeScroll() {
-    console.log('🔄 Initializing scroll system...');
-  console.log('isMobile:', isMobile);
-  console.log('Lenis available:', typeof Lenis);
-  
   // Cleanup existing
   if (lenis && typeof lenis.destroy === 'function') {
     try {
       lenis.destroy();
-      console.log('✅ Previous Lenis instance destroyed');
     } catch (e) {
       console.warn('⚠️ Error destroying lenis:', e);
     }
@@ -230,9 +223,6 @@ function showHeader() {
     rafId = null;
   }
   if (!isMobile) {
-    // ✅ DESKTOP: Use Lenis (existing code)
-    console.log('🖥️ Desktop detected - initializing Lenis...');
-    
     try {
       if (typeof Lenis === 'undefined') {
         throw new Error('Lenis constructor not available');
@@ -262,8 +252,6 @@ function showHeader() {
         throw new Error('Lenis instance creation failed');
       }
 
-      console.log('✅ Lenis instance created successfully:', lenis);
-
       lenis.on('scroll', (e) => {
         const scrollY = e.scroll || 0;
         const currentTime = Date.now();
@@ -272,7 +260,6 @@ function showHeader() {
           lastScrollY = scrollY;
           lastScrollTime = currentTime;
           isInitialized = true;
-          console.log('📍 Lenis initialized with scroll position:', scrollY);
           return;
         }
         
@@ -291,58 +278,39 @@ function showHeader() {
             lenis.raf(time);
             rafId = requestAnimationFrame(raf);
           } catch (error) {
-            console.error('❌ Lenis RAF error:', error);
             initializeNativeScroll();
             return;
           }
         } else {
-          console.warn('⚠️ Lenis not available in RAF, falling back');
           initializeNativeScroll();
           return;
         }
       }
       
       rafId = requestAnimationFrame(raf);
-      console.log('✅ Lenis RAF loop started');
-      
+
     } catch (error) {
-      console.error('❌ Failed to initialize Lenis:', error);
-      console.log('🔄 Falling back to native scroll');
       initializeNativeScroll();
     }
   } else {
-    // ✅ MOBILE: Use native scroll with proper header logic
-    console.log('📱 Mobile detected - using native scroll with header logic');
     initializeNativeScroll();
   }
-  
-  setTimeout(() => {
-    console.log('🔍 Final check - lenis variable:', typeof lenis);
-    console.log('🔍 Final check - lenis instance:', lenis);
-  }, 500);
+
 }
+
 function initializeNativeScroll() {
-  console.log('🔄 Initializing native scroll with header logic...');
   $(window).off('scroll.main');
   
   $(window).on('scroll.main', function() {
     const scrollY = $(this).scrollTop();
     const currentTime = Date.now();
     
-    console.log('📱 Mobile scroll event:', {
-      scrollY: scrollY,
-      isInitialized: isInitialized,
-      isMenuOpen: isMenuOpen,
-      currentTime: currentTime
-    });
     if (!isInitialized) {
       lastScrollY = scrollY;
       lastScrollTime = currentTime;
       isInitialized = true;
-      console.log('📍 Native scroll initialized with position:', scrollY);
       return;
     }
-    console.log('📱 Processing scroll after initialization...');
     // ✅ CRITICAL: Update isScrolled for mobile
     isScrolled = scrollY > 200;
     
@@ -354,8 +322,6 @@ function initializeNativeScroll() {
     // ✅ CRITICAL: Apply header hide/show logic on mobile
     throttledHeaderScroll(scrollY);
   });
-  
-  console.log('✅ Native scroll with header logic initialized');
 }
 
   // Reinitialize on resize
@@ -366,14 +332,8 @@ $(window).resize(function() {
   if (wasMobile !== isMobile) {
     // Screen size category changed
     isInitialized = false;
-    if (lenis && typeof lenis.destroy === 'function') {
-      try {
-        lenis.destroy();
-        console.log('✅ Lenis destroyed on resize');
-      } catch (e) {
-        console.warn('Error destroying lenis on resize:', e);
-      }
-    }
+    const wasHidden = isHeaderHidden;
+    
     lenis = null;
     
     if (rafId) {
@@ -384,6 +344,13 @@ $(window).resize(function() {
     $(window).off('scroll.main');
     
     setTimeout(() => {
+      // ✅ RESTORE: Header state after initialization
+      if (wasHidden) {
+        hideHeader(); // ✅ Re-apply hide with proper transition
+      } else {
+        showHeader(); // ✅ Re-apply show with proper transition
+      }
+      
       initializeScroll();
     }, 100);
   }
@@ -472,168 +439,319 @@ $(window).resize(function() {
   }
 );
   // Menu toggle function
-  $('.site-menu-toggle').click(function(){
-    var $this = $(this);
-    if ($('body').hasClass('menu-open')) {
-      // ✅ FIX: Close menu - lưu position trước khi thay đổi
-      $this.removeClass('open');
-      $('.js-site-navbar').fadeOut(400);
-      $('body').removeClass('menu-open');
-      $('html').removeClass('menu-open');
-      isMenuOpen = false;
-      isMenuJustClosed = true;
+  // $('.site-menu-toggle').click(function(){
+  //   var $this = $(this);
+  //   if ($('body').hasClass('menu-open')) {
+  //     // ✅ FIX: Close menu - lưu position trước khi thay đổi
+  //     $this.removeClass('open');
+  //     $('.js-site-navbar').fadeOut(400);
+  //     $('body').removeClass('menu-open');
+  //     $('html').removeClass('menu-open');
+  //     isMenuOpen = false;
+  //     isMenuJustClosed = true;
 
-      // ✅ RESET padding
-      $('.navbar-nav').css('padding-right', '');
-      $('.container-fluid').css('padding-right', '');
-      
-      // ✅ FIX: Remove event listeners TRƯỚC khi restore scroll
-      $(window).off('wheel.menuOpen touchmove.menuOpen scroll.menuOpen');
-      $(document).off('keydown.menuOpen');
 
-      if(!isMobile && lenis && typeof lenis.start === 'function'){
-        // ✅ FIX: Cải thiện logic restore scroll position
-        const currentBodyTop = $('body').css('top');
-        let scrollY = 0;
+  //     // ✅ FIX: Remove event listeners TRƯỚC khi restore scroll
+  //     $(window).off('wheel.menuOpen touchmove.menuOpen scroll.menuOpen');
+  //     $(document).off('keydown.menuOpen');
+
+  //     if(!isMobile && lenis && typeof lenis.start === 'function'){
+  //       // ✅ FIX: Cải thiện logic restore scroll position
+  //       const currentBodyTop = $('body').css('top');
+  //       let scrollY = 0;
         
-        if (currentBodyTop && currentBodyTop !== 'auto') {
-          scrollY = Math.abs(parseInt(currentBodyTop) || 0);
+  //       if (currentBodyTop && currentBodyTop !== 'auto') {
+  //         scrollY = Math.abs(parseInt(currentBodyTop) || 0);
+  //       }
+        
+  //       // ✅ Reset styles trước khi scroll
+  //       $('body').css({
+  //         'position': '',
+  //         'top': '',
+  //         'width': ''
+  //       });
+  //       $('html').css('overflow', '');
+        
+  //       // ✅ Đảm bảo scrollY hợp lệ trước khi áp dụng
+  //       if (scrollY > 0 && scrollY < document.documentElement.scrollHeight) {
+  //         window.scrollTo(0, scrollY);
+  //       }
+        
+  //       // ✅ Restart Lenis sau khi đã restore position
+  //       setTimeout(() => {
+  //       if (lenis && typeof lenis.start === 'function') {
+  //         try {
+  //           lenis.start();
+  //         } catch (e) {
+  //           console.warn('Error starting lenis:', e);
+  //         }
+  //       }
+  //     }, 50);
+        
+  //     } else {
+  //       const currentBodyTop = $('body').css('top');
+  //     let scrollY = 0;
+      
+  //     // ✅ Get stored scroll position from body top
+  //     if (currentBodyTop && currentBodyTop !== 'auto') {
+  //       scrollY = Math.abs(parseInt(currentBodyTop) || 0);
+  //     }
+
+  //       // ✅ Mobile: Reset scroll đơn giản
+  //       $('body').css({
+  //         'position': '',
+  //         'top': '',
+  //         'width': '',
+  //         'overflow': '',
+  //         'overflow-x': ''
+  //       });
+        
+  //       $('html').css({
+  //         'overflow': '',
+  //         'overflow-x': '',
+  //       });
+  //       if (scrollY > 0) {
+  //       setTimeout(() => {
+  //     window.scrollTo(0, scrollY);
+  //     document.documentElement.scrollTop = scrollY;
+  //   }, 10);
+  //     }
+  //     }
+      
+  //     updateHeaderState();
+      
+      
+  //   } else {
+  //     // ✅ FIX: Open menu - cải thiện logic lưu position
+  //     let currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      
+  //     if (isMobile && isHeaderHidden) {
+  //   const headerEl = $('.js-site-header')[0];
+  //   headerEl.style.setProperty('transition', 'transform 0.3s ease-in-out', 'important');
+  //   headerEl.style.setProperty('transform', 'translateY(0)', 'important');
+  //   $('.js-site-header').removeClass('header-hidden');
+  //   isHeaderHidden = false;
+  // }
+  //     $this.addClass('open');
+  //     $('.js-site-navbar').fadeIn(400);
+  //     $('body').addClass('menu-open');
+  //     $('html').addClass('menu-open');
+      
+  //     isMenuOpen = true;
+  //     isMenuJustClosed = false;
+  //     // const scrollbarWidth = getScrollbarWidth();
+  //     // $('.navbar-nav').css('padding-right', scrollbarWidth + 'px');
+  //     // $('.container-fluid').css('padding-right', scrollbarWidth + 'px');
+      
+  //     // Lock scroll khác nhau cho desktop/mobile
+  //     if(!isMobile && lenis){
+  //       // Lấy scroll position CHÍNH XÁC trước khi lock
+  //       const scrollPosition = lenis.scroll || window.pageYOffset || document.documentElement.scrollTop || 0;
+        
+  //       // Lock events trước khi stop Lenis
+  //       $(window).on('wheel.menuOpen', function(e) {
+  //         e.preventDefault();
+  //         return false;
+  //       });
+  //       $(window).on('touchmove.menuOpen', function(e) {
+  //         e.preventDefault();
+  //         return false;
+  //       });
+  //       $(document).on('keydown.menuOpen', function(e) {
+  //         if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+  //           e.preventDefault();
+  //           return false;
+  //         }
+  //       });
+        
+  //       // Stop Lenis sau khi đã lock events
+  //       lenis.stop();
+        
+  //       // Áp dụng fixed position với scroll position chính xác
+  //       $('body').css({
+  //         'position': 'fixed',
+  //         'top': `-${scrollPosition}px`,
+  //         'width': '100%'
+  //       });
+  //       $('html').css('overflow', 'hidden');
+        
+  //     } else {
+  //       // Prevent scroll events trên mobile
+  //       $(window).on('scroll.menuOpen touchmove.menuOpen wheel.menuOpen', function(e) {
+        
+  //         return false;
+  //       });
+        
+  //       $(document).on('keydown.menuOpen', function(e) {
+  //         if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+  //           e.preventDefault();
+  //           return false;
+  //         }
+  //       });
+  //       requestAnimationFrame(() => {// ✅ Apply fixed position with stored scroll
+  //     $('body').css({
+  //       'overflow': 'hidden',
+  //       'position': 'fixed',
+  //       'top': `-${currentScroll}px`,
+  //       'width': '100%',
+  //       'left': '0',
+  //       'right': '0'
+  //     });
+  //     $('html').css('overflow', 'hidden');
+  //     });
+  //   }
+  //     updateHeaderState();
+  //   }
+  // });
+  $('.site-menu-toggle').off('click').on('click', function(e){
+  e.preventDefault();
+  e.stopPropagation();
+  
+  var $this = $(this);
+  
+  if ($('body').hasClass('menu-open')) {
+    // ✅ CLOSE MENU - Simple approach
+    console.log('Closing menu...');
+    
+    $this.removeClass('open');
+    $('.js-site-navbar').fadeOut(400);
+    
+    // ✅ CRITICAL: Remove all classes immediately
+    $('body').removeClass('menu-open');
+    $('html').removeClass('menu-open');
+    
+    // ✅ CRITICAL: Remove ALL possible event listeners
+    $(window).off('scroll.menuOpen touchmove.menuOpen wheel.menuOpen touchstart.menuOpen');
+    $(document).off('keydown.menuOpen touchstart.menuOpen touchmove.menuOpen');
+    
+    // ✅ CRITICAL: Reset ALL styles completely
+    $('body, html').css({
+      'position': '',
+      'top': '',
+      'width': '',
+      'height': '',
+      'overflow': '',
+      'overflow-x': '',
+      'overflow-y': '',
+      'touch-action': '',
+      '-webkit-overflow-scrolling': '',
+      'overscroll-behavior': '',
+      'left': '',
+      'right': ''
+    });
+    
+    // ✅ Restart Lenis if available
+    if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
+      setTimeout(() => {
+        try {
+          lenis.start();
+          console.log('✅ Lenis restarted');
+        } catch (e) {
+          console.warn('Lenis restart error:', e);
         }
-        
-        // ✅ Reset styles trước khi scroll
-        $('body').css({
-          'position': '',
-          'top': '',
-          'width': ''
-        });
-        $('html').css('overflow', '');
-        
-        // ✅ Đảm bảo scrollY hợp lệ trước khi áp dụng
-        if (scrollY > 0 && scrollY < document.documentElement.scrollHeight) {
-          window.scrollTo(0, scrollY);
-        }
-        
-        // ✅ Restart Lenis sau khi đã restore position
-        setTimeout(() => {
-        if (lenis && typeof lenis.start === 'function') {
-          try {
-            lenis.start();
-          } catch (e) {
-            console.warn('Error starting lenis:', e);
-          }
-        }
-      }, 50);
-        
-      } else {
-        const currentBodyTop = $('body').css('top');
-      let scrollY = 0;
-      
-      // ✅ Get stored scroll position from body top
-      if (currentBodyTop && currentBodyTop !== 'auto') {
-        scrollY = Math.abs(parseInt(currentBodyTop) || 0);
+      }, 100);
+    }
+    
+    isMenuOpen = false;
+    updateHeaderState();
+    
+    console.log('✅ Menu closed, scroll should work');
+    
+  } else {
+    // ✅ OPEN MENU - CSS-only approach
+    console.log('Opening menu...');
+    
+    if (isMobile && isHeaderHidden) {
+      const headerEl = $('.js-site-header')[0];
+      if (headerEl) {
+        headerEl.style.setProperty('transform', 'translateY(0)', 'important');
+        $('.js-site-header').removeClass('header-hidden');
+        isHeaderHidden = false;
       }
-      
-      console.log('Mobile close menu - restoring scroll to:', scrollY);
-        // ✅ Mobile: Reset scroll đơn giản
-        $('body').css({
-          'position': 'static',
-          'top': 'auto',
-          'width': 'auto',
-          'overflow': 'auto',
-          'overflow-x': 'hidden'
-        });
-        
-        $('html').css({
-          'overflow': 'auto',
-          'overflow-x': 'hidden',
-        });
-        if (scrollY > 0) {
-        window.scrollTo(0, scrollY);
-        document.documentElement.scrollTop = scrollY;
-        document.body.scrollTop = scrollY;
+    }
+    
+    $this.addClass('open');
+    $('.js-site-navbar').fadeIn(400);
+    $('body').addClass('menu-open');
+    $('html').addClass('menu-open');
+    
+    // ✅ Stop Lenis for desktop only
+    if (typeof lenis !== 'undefined' && lenis && !isMobile && typeof lenis.stop === 'function') {
+      lenis.stop();
+    }
+    
+    isMenuOpen = true;
+    updateHeaderState();
+    
+    console.log('✅ Menu opened');
+  }
+});
+
+// ✅ ADD: Emergency cleanup function
+function forceCleanupMenu() {
+  console.log('🔧 Force cleanup menu...');
+  
+  // Remove all classes
+  $('body').removeClass('menu-open');
+  $('html').removeClass('menu-open');
+  $('.site-menu-toggle').removeClass('open');
+  $('.js-site-navbar').hide();
+  
+  // Remove ALL event listeners
+  $(window).off('scroll.menuOpen touchmove.menuOpen wheel.menuOpen touchstart.menuOpen');
+  $(document).off('keydown.menuOpen touchstart.menuOpen touchmove.menuOpen keyup.menuOpen');
+  
+  // Reset ALL styles
+  $('body, html').css({
+    'position': '',
+    'top': '',
+    'width': '',
+    'height': '',
+    'overflow': '',
+    'overflow-x': '',
+    'overflow-y': '',
+    'touch-action': '',
+    '-webkit-overflow-scrolling': '',
+    'overscroll-behavior': '',
+    'left': '',
+    'right': ''
+  });
+  
+  // Reset flags
+  isMenuOpen = false;
+  
+  // Restart Lenis
+  if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
+    setTimeout(() => {
+      try {
+        lenis.start();
+        console.log('✅ Lenis force restarted');
+      } catch (e) {
+        console.warn('Lenis force restart error:', e);
       }
+    }, 100);
+  }
+  
+  console.log('✅ Force cleanup completed');
+}
+
+// ✅ ADD: Auto cleanup on page load
+$(document).ready(function() {
+  setTimeout(forceCleanupMenu, 500);
+  
+  // Double tap emergency cleanup
+  let tapCount = 0;
+  $(document).on('touchend', function() {
+    if (window.innerWidth <= 768) {
+      tapCount++;
+      if (tapCount === 3) { // Triple tap
+        console.log('🆘 Emergency cleanup triggered');
+        forceCleanupMenu();
       }
-      
-      updateHeaderState();
-      
-      
-    } else {
-      // ✅ FIX: Open menu - cải thiện logic lưu position
-      $this.addClass('open');
-      $('.js-site-navbar').fadeIn(400);
-      $('body').addClass('menu-open');
-      $('html').addClass('menu-open');
-      
-      isMenuOpen = true;
-      isMenuJustClosed = false;
-      // const scrollbarWidth = getScrollbarWidth();
-      // $('.navbar-nav').css('padding-right', scrollbarWidth + 'px');
-      // $('.container-fluid').css('padding-right', scrollbarWidth + 'px');
-      
-      // Lock scroll khác nhau cho desktop/mobile
-      if(!isMobile && lenis){
-        // Lấy scroll position CHÍNH XÁC trước khi lock
-        const scrollPosition = lenis.scroll || window.pageYOffset || document.documentElement.scrollTop || 0;
-        
-        // Lock events trước khi stop Lenis
-        $(window).on('wheel.menuOpen', function(e) {
-          e.preventDefault();
-          return false;
-        });
-        $(window).on('touchmove.menuOpen', function(e) {
-          e.preventDefault();
-          return false;
-        });
-        $(document).on('keydown.menuOpen', function(e) {
-          if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-            e.preventDefault();
-            return false;
-          }
-        });
-        
-        // Stop Lenis sau khi đã lock events
-        lenis.stop();
-        
-        // Áp dụng fixed position với scroll position chính xác
-        $('body').css({
-          'position': 'fixed',
-          'top': `-${scrollPosition}px`,
-          'width': '100%'
-        });
-        $('html').css('overflow', 'hidden');
-        
-      } else {
-        let currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      
-      // ✅ Apply fixed position with stored scroll
-      $('body').css({
-        'overflow': 'hidden',
-        'position': 'fixed',
-        'top': `-${currentScroll}px`,
-        'width': '100%',
-        'left': '0',
-        'right': '0'
-      });
-      $('html').css('overflow', 'hidden');
-      
-        
-        // Prevent scroll events trên mobile
-        $(window).on('scroll.menuOpen touchmove.menuOpen wheel.menuOpen', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          return false;
-        });
-        
-        $(document).on('keydown.menuOpen', function(e) {
-          if([32, 33, 34, 35, 36, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-            e.preventDefault();
-            return false;
-          }
-        });
-      }
-      updateHeaderState();
+      setTimeout(() => tapCount = 0, 1000);
     }
   });
+});
   // ✅ THÊM click overlay để đóng menu
 $('.menu-overlay').click(function() {
   if ($('body').hasClass('menu-open')) {
@@ -767,6 +885,7 @@ accommodationSlider.owlCarousel({
       touchDrag: true,     // ✅ Enable touch on mobile
       mouseDrag: false,    // ✅ Disable mouse on mobile
       pullDrag: true,      // ✅ Enable pull
+      dots: true,
       dotsSpeed: 300, 
     },
     600: {
@@ -775,13 +894,15 @@ accommodationSlider.owlCarousel({
       stagePadding: 50,
       touchDrag: true,     // ✅ Enable touch on tablet
       mouseDrag: true, 
+      dots: true,
     },
     1000: {
       items: 2, // Desktop: 2 items
       margin: 40,
       stagePadding: 0,
       touchDrag: false,    // ✅ Disable touch on desktop
-      mouseDrag: true,  
+      mouseDrag: true,
+      dots: false,  
     }
   }
 });
@@ -822,6 +943,8 @@ $('.nav-button.next').off('click').on('click', function(e) {
   slideNext();
 });
 
+
+
 // Wellness & Events Slider  
 var weSlider = $('.we-slider');
 let isWeSliding = false; // Flag riêng cho wellness slider
@@ -837,14 +960,14 @@ weSlider.owlCarousel({
   stagePadding: 0,
   smartSpeed: 1200,
   slideBy: 1,
-  center: false,
+  center: true,
   animateOut: false,
   animateIn: false,
   touchDrag: true,      // ✅ Enable touch drag
   mouseDrag: true,      // ✅ Enable mouse drag
   pullDrag: true,       // ✅ Enable pull drag
   freeDrag: false,      // ✅ Disable free drag
-  
+  stagePadding: 0,
 
   touchTreshold: 100,   // ✅ Minimum swipe distance
   dotsSpeed: 400,
@@ -852,18 +975,24 @@ weSlider.owlCarousel({
   responsive: {
     0: {
       items: 1, // Mobile: 1 item
-      margin: 0,
+      margin: 20,
       smartSpeed: 1000,
       touchDrag: true,     // ✅ Enable touch on mobile
       mouseDrag: false,    // ✅ Disable mouse on mobile
       pullDrag: true,
+      dots: true,
+      dotsSpeed: 300,
+      autoplay: true,
     },
     600: {
       items: 1, // Tablet: 1 item  
-      margin: 0,
+      margin: 50,
       smartSpeed: 1100,
       touchDrag: true,     // ✅ Enable touch on tablet
       mouseDrag: true,
+      dots: true,
+      dotsSpeed: 300,
+      autoplay: true,
     },
     1000: {
       items: 1, // Desktop: 1 item
@@ -872,6 +1001,9 @@ weSlider.owlCarousel({
       touchDrag: false,
       mouseDrag: true,
       pullDrag: false, 
+      dots: false,
+      dotsSpeed: 300,
+      autoplay: false,
     }
   }
 });
@@ -910,18 +1042,52 @@ $('.section-2 .nav-button.next').off('click').on('click', function(e) {
   e.preventDefault();
   weSlideNext();
 });
-  AOS.init({
-    duration: 1000,
-    easing: 'ease-in-out',
-    once: true,
-    delay: 0,
-    offset: 120,
-    mirror: false,      
-    anchorPlacement: 'top-bottom',
-    disable: false, 
-    startEvent: 'DOMContentLoaded'
-  });
+  function initAOS() {
+  const isMobileDevice = window.innerWidth < 1024;
+  
+  if (isMobileDevice) {
+    // ✅ MOBILE: Enable AOS với settings tối ưu cho mobile
+    AOS.init({
+      duration: 800,        // Nhanh hơn cho mobile
+      easing: 'ease-in-out',
+      once: true,
+      delay: 0,             // Không delay trên mobile
+      offset: 80,           // Trigger sớm hơn trên mobile
+      mirror: false,
+      anchorPlacement: 'top-bottom',
+      disable: false,       //Enable AOS trên mobile
+      startEvent: 'DOMContentLoaded',
+      disableMutationObserver: false,
+      debounceDelay: 50,
+      throttleDelay: 99
+    });
+  } else {
+    // ✅ DESKTOP: Settings như cũ
+    AOS.init({
+      duration: 1000,
+      easing: 'ease-in-out',
+      once: true,
+      delay: 0,
+      offset: 120,
+      mirror: false,
+      anchorPlacement: 'top-bottom',
+      disable: false
+    });
+  }
+}
 
+// ✅ Initialize AOS
+initAOS();
+
+// ✅ Reinitialize AOS on window resize
+$(window).resize(function() {
+  // ✅ Debounce resize để tránh spam
+  clearTimeout(window.aosResizeTimeout);
+  window.aosResizeTimeout = setTimeout(() => {
+    initAOS();
+    AOS.refresh(); // ✅ Refresh để recalculate positions
+  }, 150);
+});
 // For about.html
 document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.add('about-page');
