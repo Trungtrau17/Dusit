@@ -2354,6 +2354,38 @@ h1, h2, h3, h4, h5 {
     display: block;
     margin: 0 auto ; 
   }
+  .section .ev .heading {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+    margin-left: var(--space-md);
+    margin-right: var(--space-md);
+  }
+  
+  .ev .ev-img img {
+    height: clamp(250px, 50vh, 350px); /* ✅ Even shorter on small screens */
+  }
+  
+  .ev .ev-img .overlay-text {
+    max-width: 80%; /* ✅ Almost full width */
+    width: 80%;
+    padding: var(--space-md); /* ✅ Even smaller padding */
+  }
+  
+  .ev .ev-img .overlay-text h3 {
+    font-size: clamp(1.25rem, 6vw, 1.75rem);
+    margin-bottom: var(--space-sm);
+    letter-spacing: 0.5px;
+  }
+  
+  .ev .ev-img .overlay-text p {
+    font-size: clamp(0.8rem, 4vw, 0.95rem);
+    line-height: 1.4;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .ev-img .overlay-text .collection-btn {
+    font-size: clamp(0.7rem, 3.5vw, 0.8rem);
+    padding: var(--space-xs) var(--space-sm);
+  }
   /* ✅ WELLNESS PAGE RESPONSIVE */
   .wellness-content .wellness-item {
     flex-direction: column;
@@ -2458,7 +2490,7 @@ h1, h2, h3, h4, h5 {
   
   .section-2 .we-items .item .image-container img {
     width: 100%;
-    max-width: clamp(18.75rem, 90vw, 32rem);
+    max-width: 100%;
   }
   
 /* ✅ CONTACT PAGE MAP */
