@@ -1081,10 +1081,6 @@ function updateReserveSection(data) {
     reserveSection.find('h2').text(reserveTitle);
     reserveSection.find('a').text(reserveBtn);
     
-    console.log(`✅ Reserve section updated for ${currentPage}:`, {
-      title: reserveTitle,
-      button: reserveBtn
-    });
   } 
 }
 // ✅ Apply language with transition effect
@@ -1138,7 +1134,6 @@ $(document).ready(function() {
     const $this = $(this);
     const lang = $this.data('lang');
     
-    console.log('Language switch clicked:', lang);
     
     if (!lang || lang === currentLanguage) {
       return;
@@ -1257,7 +1252,7 @@ function showHeader() {
     try {
       lenis.destroy();
     } catch (e) {
-      console.warn('⚠️ Error destroying lenis:', e);
+     
     }
   }
   lenis = null;
@@ -1527,7 +1522,7 @@ $(window).resize(function() {
   //         try {
   //           lenis.start();
   //         } catch (e) {
-  //           console.warn('Error starting lenis:', e);
+  //          
   //         }
   //       }
   //     }, 50);
@@ -1663,7 +1658,7 @@ $(window).resize(function() {
     
     if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
       scrollY = Math.abs(parseInt(bodyTop) || 0);
-      console.log('Restoring scroll to:', scrollY);
+  
     }
     // ✅ CRITICAL: Remove all classes immediately
     $('body').removeClass('menu-open');
@@ -1707,7 +1702,7 @@ $(window).resize(function() {
         try {
           lenis.start();
         } catch (e) {
-          console.warn('Lenis restart error:', e);
+        
         }
       }, 100);
     }
@@ -1768,7 +1763,6 @@ $(window).resize(function() {
     isMenuOpen = true;
     updateHeaderState();
     
-    console.log('✅ Menu opened');
   }
 });
 
@@ -1780,7 +1774,6 @@ function forceCleanupMenu() {
   
   if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
     scrollY = Math.abs(parseInt(bodyTop) || 0);
-    console.log('Force cleanup: restoring scroll to:', scrollY);
   }
   // Remove all classes
   $('body').removeClass('menu-open');
@@ -1827,7 +1820,7 @@ function forceCleanupMenu() {
       try {
         lenis.start();
       } catch (e) {
-        console.warn('Lenis force restart error:', e);
+      
       }
     }, 100);
   }
