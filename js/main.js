@@ -28,7 +28,9 @@
         dining: "DINING",
         wellness: "WELLNESS",
         events: "EVENTS",
-        contact: "CONTACT"
+        contact: "CONTACT",
+        languageEN: "English",
+        languageVN: "Vietnamese"
       },
       
       // Page-specific hero titles
@@ -47,7 +49,7 @@
           button: "HER STORY"
         },
         about: {
-          title: "Our Story",
+          title: "Her Story",
           content: "Inspired by the timeless legacy of Princess Tu Hoa, Dusit Le Palais Tu Hoa Hanoi weaves a rich tapestry of heritage with contemporary luxury. Nestled gracefully by the serene West Lake, our hotel offers an elegant retreat where tradition meets innovation, reflecting the cultural essence of Hanoi in every detail."
         },
         collection: {
@@ -215,7 +217,7 @@
 
       about_page: {
         title: "About Dusit Le Palais Tu Hoa Ha Noi",
-        story: "Our Story",
+        story: "Her Story",
         storyContent: "Inspired by the timeless legacy of Princess Tu Hoa, Dusit Le Palais Tu Hoa Hanoi weaves a rich tapestry of heritage with contemporary luxury. Nestled gracefully by the serene West Lake, our hotel offers an elegant retreat where tradition meets innovation, reflecting the cultural essence of Hanoi in every detail.",
         breadcrumb: "About",
         sections: {
@@ -273,6 +275,10 @@
           pool: {
             title: "Outdoor Swimming Pool (Coming Soon)",
             description: "Unwind in our stunning outdoor pool, a serene retreat with breathtaking panoramic views. Whether it's a refreshing morning swim, a leisurely dip, or lounging poolside with a cool drink, relaxation awaits."
+          },
+          onsen: {
+            title: "Onsen",
+            description: "Indulge in an authentic Onsen experience with soothing hot springs, luxurious bath amenities, and a tranquil garden view."
           }
         }
       },
@@ -305,7 +311,9 @@
         dining: "NHÀ HÀNG",
         wellness: "SỨC KHỎE",
         events: "SỰ KIỆN",
-        contact: "LIÊN HỆ"
+        contact: "LIÊN HỆ",
+        languageEN: "Tiếng Anh",
+        languageVN: "Tiếng Việt"
       },
       
       // Page-specific hero titles
@@ -324,7 +332,7 @@
           button: "CÂU CHUYỆN CỦA CÔ"
         },
         about: {
-          title: "Câu Chuyện Của Chúng Tôi",
+          title: "Câu Chuyện Của Cô",
           content: "Lấy cảm hứng từ di sản vượt thời gian của Công chúa Từ Hoa, Dusit Le Palais Từ Hoa Hà Nội dệt nên một tấm thảm phong phú về di sản với sự sang trọng đương đại. Tọa lạc uyển chuyển bên Hồ Tây thanh bình, khách sạn của chúng tôi mang đến một nơi nghỉ dưỡng thanh lịch nơi truyền thống gặp gỡ đổi mới, phản ánh bản chất văn hóa của Hà Nội trong từng chi tiết."
         },
         collection: {
@@ -493,7 +501,7 @@
 
       about_page: {
         title: "Về Dusit Le Palais Từ Hoa Hà Nội",
-        story: "Câu Chuyện Của Chúng Tôi", 
+        story: "Câu Chuyện Của Cô", 
         storyContent: "Lấy cảm hứng từ di sản vượt thời gian của Công chúa Từ Hoa, Dusit Le Palais Từ Hoa Hà Nội dệt nên một tấm thảm phong phú về di sản với sự sang trọng đương đại. Tọa lạc uyển chuyển bên Hồ Tây thanh bình, khách sạn của chúng tôi mang đến một nơi nghỉ dưỡng thanh lịch nơi truyền thống gặp gỡ đổi mới, phản ánh bản chất văn hóa của Hà Nội trong từng chi tiết.",
         breadcrumb: "Giới Thiệu",
         sections: {
@@ -551,7 +559,11 @@
           pool: {
             title: "Hồ Bơi Ngoài Trời (Sắp Ra Mắt)",
             description: "Thư giãn trong hồ bơi ngoài trời tuyệt đẹp của chúng tôi, một nơi nghỉ dưỡng yên tĩnh với tầm nhìn toàn cảnh ngoạn mục. Dù là bơi lội sảng khoái buổi sáng, tắm thư giãn hay nằm dài bên hồ bơi với đồ uống mát lạnh, sự thư giãn đang chờ đón bạn."
-          }
+          },
+          onsen: {
+            title: "Onsen",
+            description: "Thư giãn trong trải nghiệm Onsen chính thống với suối nước nóng, tiện nghi tắm sang trọng và tầm nhìn ra khu vườn yên tĩnh."
+          },
         }
       },
 
@@ -706,10 +718,7 @@ function detectBrowserLanguage() {
   const browserLang = navigator.language || navigator.userLanguage;
   return browserLang.startsWith('vi') ? 'vn' : 'en';
 }
-function updateLanguageSwitch(lang) {
-  $('.language-switch .lang-item').removeClass('active');
-  $(`.language-switch .lang-item[data-lang="${lang}"]`).addClass('active');
-}
+
 function updateAccommodationContent(data) {
   // Map room data for easier access
   const roomMapping = {
@@ -790,6 +799,8 @@ function applyLanguage(lang) {
   $('.site-navbar .menu li:nth-child(5) a').text(data.nav.events);
   $('.site-navbar .menu li:nth-child(6) a').text(data.nav.contact);
   
+  $('.menu-lang-item[data-lang="en"]').text(data.nav.languageEN);
+  $('.menu-lang-item[data-lang="vn"]').text(data.nav.languageVN);
   // ✅ Update hero title if exists
   if (data.hero[currentPage] && $('.site-hero .heading').length) {
     $('.site-hero .heading').html(data.hero[currentPage]);
@@ -979,6 +990,9 @@ function updateWellnessPage(data) {
   
   $('.wellness-item:nth-child(2) .wellness-title').text(wellnessData.facilities.pool.title);
   $('.wellness-item:nth-child(2) .description').text(wellnessData.facilities.pool.description);
+
+  $('.wellness-item:nth-child(3) .wellness-title').text(wellnessData.facilities.onsen.title);
+  $('.wellness-item:nth-child(3) .description').text(wellnessData.facilities.onsen.description);
 }
 
 // ✅ Update functions cho events page
@@ -1152,7 +1166,56 @@ $(document).ready(function() {
     applyLanguageWithTransition(lang);
   });
 });
+function updateMenuLanguageSwitch(lang) {
+  $('.menu-lang-item').removeClass('active');
+  $(`.menu-lang-item[data-lang="${lang}"]`).addClass('active');
+}
 
+// Cập nhật function updateLanguageSwitch để handle cả header và menu
+function updateLanguageSwitch(lang) {
+  // Update header language switch
+  $('.language-switch .lang-item').removeClass('active');
+  $(`.language-switch .lang-item[data-lang="${lang}"]`).addClass('active');
+  
+  // Update menu language switch
+  updateMenuLanguageSwitch(lang);
+}
+$(document).ready(function() {
+  // ✅ Menu language switch click handler
+  $('.menu-lang-item').on('click', function(e) {
+    
+    const $this = $(this);
+    const lang = $this.data('lang');
+    
+    if (!lang || lang === currentLanguage) {
+      return;
+    }
+    
+    // Update active state for both header and menu
+    updateLanguageSwitch(lang);
+    
+    // Update current language
+    currentLanguage = lang;
+    
+    // Save to localStorage
+    localStorage.setItem('dusit-language', lang);
+    
+    // Apply language with smooth transition
+    applyLanguageWithTransition(lang);
+    
+    // ✅ Close menu after language change on mobile
+    if (window.innerWidth <= 480 && $('body').hasClass('menu-open')) {
+      setTimeout(() => {
+        $('.site-menu-toggle').trigger('click');
+      }, 300); // ✅ Small delay for smooth transition
+    }
+  });
+  
+  // ✅ Initialize menu language switcher on page load
+  setTimeout(() => {
+    updateMenuLanguageSwitch(currentLanguage);
+  }, 100);
+});
   // Optimized throttle
   function throttle(func, limit) {
     let inThrottle;

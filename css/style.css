@@ -306,6 +306,41 @@ h1, h2, h3, h4, h5 {
 .language-transition * {
   transition: opacity 0.15s ease-in-out;
 }
+.menu-language-switch {
+  display: none;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-lg);
+  border-top: 1px solid rgba(55, 54, 53, 0.2);
+}
+
+.menu-lang-options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.menu-lang-item {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(1rem, 4vw, 1.25rem);
+  font-weight: 400;
+  color: rgba(55, 54, 53, 0.7);
+  cursor: pointer;
+  padding: var(--space-sm) var(--space-md);
+  transition: all 0.3s ease;
+  position: relative;
+  background-color: transparent;
+  letter-spacing: 1px;
+}
+
+.menu-lang-item.active {
+  color: #373635;
+  font-weight: 600;
+
+
+}
+
+
 .site-header {
   position: fixed;
   top: 0;
@@ -901,7 +936,7 @@ h1, h2, h3, h4, h5 {
   font-size: calc(var(--space-lg) - 1.6px);
   color: #373635;
   margin-left: calc(var(--space-2xl) - 0.88px);
-  margin-bottom: var(--space-2xl)
+  margin-bottom: calc(var(--space-2xl) - 5px);
 }
 .slider-section .site-dining{
   background-image: url('/images/Soi_Artwork_big_crop.webp');
@@ -1261,7 +1296,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: calc(var(--space-2xl)) 0;
+  margin: calc(var(--space-2xl) - 5px) 0;
 }
 .section-2 .we-items .item .image-container {
   position: relative;
@@ -2004,11 +2039,16 @@ h1, h2, h3, h4, h5 {
   align-items: center;
   justify-content: center;
   padding: var(--space-2xl);
-  gap: calc(var(--space-xl) + 2px);
+  gap: calc(var(--space-3xl) + 5px);
 }
 .about-item .about-image img{
-  max-width: clamp(400px, 41.67vw, 650px);
-  height: auto;
+  /* max-width: clamp(400px, 41.67vw, 650px);
+  height: auto; */
+  height: 100vh;
+  width: auto;
+}
+.about-item .about-text{
+  margin-left: clamp(80px, 7.86vw, 120px);
 }
 .about-item .about-text .about-title{
   font-family: "Playfair Display", serif;
@@ -2028,12 +2068,17 @@ h1, h2, h3, h4, h5 {
   align-items: center;
   justify-content: center;
   padding: var(--space-2xl);
-  gap: calc(var(--space-xl) + 2px);
+  gap: calc(var(--space-3xl) + 5px);
   background-color: #F0EBE2;
 }
+.about-item-2 .about-text{
+  margin-right: clamp(80px, 7.86vw, 120px);
+}
 .about-item-2 .about-image img{
-  max-width: clamp(400px, 41.67vw, 650px);
-  height: auto;
+  /* max-width: clamp(400px, 41.67vw, 650px);
+  height: auto; */
+  height: 100vh;
+  width: auto;
 }
 .about-item-2 .about-text .about-title{
   font-family: "Playfair Display", serif;
@@ -2106,7 +2151,7 @@ h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-2xl);
+  padding: calc(var(--space-2xl) + 5px) var(--space-2xl);
   gap: calc(var(--space-xl) + 2px);
 }
 .wellness-item .wellness-image img{
@@ -2124,6 +2169,9 @@ h1, h2, h3, h4, h5 {
   font-size: var(--font-size-base);
   color: rgba(55, 54, 53, 0.7);
   line-height: 1.5;
+}
+.wellness-content .wellness-item:nth-child(2) {
+    background-color: #E7DED4;
 }
 .images-list{
   margin-top: var(--space-2xl);
@@ -2183,9 +2231,10 @@ h1, h2, h3, h4, h5 {
     font-size: clamp(1.75rem, 6vw, 2.5rem); /* ✅ Rem-based */
     line-height: 1.2;
   }
-  .site-header .site-logo img {
-    height: calc(var(--logo-height) + 0.125rem); /* ✅ +2px = +0.125rem */
+  .site-header {
+    z-index: 300;
   }
+  
   
   .site-header .site-logo a {
     height: calc(var(--logo-height) + 0.125rem); /* ✅ Container cũng tăng theo */
@@ -2404,6 +2453,12 @@ h1, h2, h3, h4, h5 {
   .wellness-content .wellness-item:nth-child(1) .wellness-image {
     order: 1;
   }
+  .wellness-content .wellness-item:nth-child(3) .wellness-text {
+    order: 2;
+  }
+  .wellness-content .wellness-item:nth-child(3) .wellness-image {
+    order: 1;
+  }
   /* ✅ DINING PAGE RESPONSIVE */
   .dining-service .res-list {
     flex-direction: column;
@@ -2565,7 +2620,7 @@ h1, h2, h3, h4, h5 {
     flex-wrap: wrap;
     gap: var(--space-sm);
   }
-
+  
 }
 
 @media (max-width: 480px) {
@@ -2585,7 +2640,23 @@ h1, h2, h3, h4, h5 {
   .menu-overlay {
     display: none;
   }
-
+  .site-navbar nav .menu {
+    margin-top: clamp(60px, 15vh, 100px); /* ✅ Reduce top margin */
+    margin-bottom: var(--space-xl); /* ✅ Add bottom margin */
+  }
+  
+  .site-navbar nav .menu li {
+    margin-bottom: var(--space-md); /* ✅ Reduce spacing between items */
+  }
+  
+  /* ✅ Adjust menu item font size to fit more content */
+  .site-navbar nav .menu li a {
+    font-size: clamp(1rem, 4.5vw, 1.5rem); /* ✅ Slightly smaller */
+    padding: var(--space-sm) 0; /* ✅ Reduce padding */
+  }
+  .menu-language-switch {
+    display: block; /* ✅ Show menu language switch */
+  }
 
 
   .site-hero {
