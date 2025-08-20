@@ -14,6 +14,7 @@ html {
   scrollbar-gutter: stable;
   scrollbar-width: auto !important;
   scrollbar-color: #c1c1c1 #f1f1f1;
+  
 }
 body {
   zoom: 1 !important;
@@ -1031,11 +1032,11 @@ h1, h2, h3, h4, h5 {
 
 .dining-slider.owl-carousel .owl-dots .owl-dot {
   display: inline-block;
-  width: clamp(8px, 1.2vw, 12px);
-  height: clamp(8px, 1.2vw, 12px);
+  width: 30px;
+  height: 5px;
   margin: 0 clamp(6px, 0.8vw, 10px);
-  border-radius: 50%;
-  background-color: rgba(55, 54, 53, 0.3);
+  border-radius: 15px;
+  background-color: rgba(200, 200, 200, 0.4);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -1044,7 +1045,9 @@ h1, h2, h3, h4, h5 {
 
 .dining-slider.owl-carousel .owl-dots .owl-dot.active {
   background-color: #373635;
-  transform: scale(1.2);
+  width: 45px;
+  height: 5px;
+  border-radius: 15px;
 }
 
 .dining-slider.owl-carousel .owl-dots .owl-dot:hover {
@@ -1338,7 +1341,8 @@ h1, h2, h3, h4, h5 {
 .section-2 {
   position: relative; 
   padding: var(--space-2xl) 0;  
-  background-color: #E7DED4;
+  background-color: #E7DFD8;
+  /* background-color: #E8DFD5; */
 }
 .no-background{
   background: none;
@@ -1846,10 +1850,12 @@ h1, h2, h3, h4, h5 {
 }
 .embracing .collection-image img{
   width: 100%;
-  height: auto;
+  height: 100vh;
   max-width: clamp(70vw, 90vw, 95vw);
   display: block;
   margin: 0 auto;
+  object-fit: cover;
+  object-position: center center;
 }
 
 .room-item{
@@ -2033,6 +2039,7 @@ h1, h2, h3, h4, h5 {
   padding: 0 var(--space-2xl);
   margin-bottom: calc(var(--space-md) + 1px);
 }
+
 .res-item {
   display: flex; /* Force flex */
   flex-direction: column;
@@ -2044,9 +2051,12 @@ h1, h2, h3, h4, h5 {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .res-item .res-image img{
   display: block;
+  width: 100%;
+  height: auto;
   max-width: clamp(280px, 29.87vw, 450px);
   margin-bottom: calc(var(--space-md) + 1px);
   transition: transform 0.4s ease;
@@ -2067,17 +2077,19 @@ h1, h2, h3, h4, h5 {
   color: rgba(55, 54, 53, 0.7);
   margin-bottom: calc(var(--space-md) + 1px);
   max-width: 100%;
+  justify-content: center;
 }
 
 .res-item:hover .res-image img {
   transform: scale(1.02); /* Tăng kích thước hình ảnh khi hover */
 }
 
-.res-item-2 {
-  display: flex; /* ✅ Force flex */
+/* .res-item-2 {
+  display: flex; 
   flex-direction: column;
   align-items: center;
   width: 100%;
+  justify-self: center;
 }
 .res-item-2 .res-image {
   display: flex;
@@ -2110,8 +2122,8 @@ h1, h2, h3, h4, h5 {
 }
 
 .res-item-2:hover .res-image img {
-  transform: scale(1.02); /* Tăng kích thước hình ảnh khi hover */
-}
+  transform: scale(1.02);
+} */
 .about-content .about-item{
   display: flex;
   align-items: center;
@@ -2217,7 +2229,7 @@ h1, h2, h3, h4, h5 {
 }
 
 .events-slide img {
-  width: 100%; /* ✅ Full width */
+  width: 100%; /* Full width */
   max-width: 100%;
   height: auto;
   
@@ -2247,11 +2259,11 @@ h1, h2, h3, h4, h5 {
 
 .events-slider.owl-carousel .owl-dots .owl-dot {
   display: inline-block;
-  width: clamp(8px, 1.2vw, 12px);
-  height: clamp(8px, 1.2vw, 12px);
+  width: 30px;
+  height: 5px;
   margin: 0 clamp(6px, 0.8vw, 10px);
-  border-radius: 50%;
-  background-color: rgba(55, 54, 53, 0.3);
+  border-radius: 15px;
+  background-color: rgba(200, 200, 200, 0.4);
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -2260,7 +2272,9 @@ h1, h2, h3, h4, h5 {
 
 .events-slider.owl-carousel .owl-dots .owl-dot.active {
   background-color: #373635;
-  transform: scale(1.2);
+  width: 45px;
+  height: 5px;
+  border-radius: 15px;
 }
 
 .events-slider.owl-carousel .owl-dots .owl-dot:hover {
@@ -2276,6 +2290,8 @@ h1, h2, h3, h4, h5 {
 }
 .events-content .events-item:nth-child(2) {
   background-color: #E7DED4;
+  padding: var(--space-3xl) var(--space-2xl);
+  margin-top: var(--space-lg);
 }
 .events-item .events-image img{
   max-width: clamp(450px, 45.59vw, 700px);
@@ -2378,6 +2394,8 @@ h1, h2, h3, h4, h5 {
   max-width: clamp(220px, 22.4vw, 350px);
   height: auto;
 }
+
+
 
 
 @media (max-width: 768px) {

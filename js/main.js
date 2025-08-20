@@ -590,7 +590,7 @@
     const isMobileOrTablet = $(window).width() <= 1024;
     
     if (isMobileOrTablet) {
-      // ✅ Force show overlay on mobile/tablet
+      // Force show overlay on mobile/tablet
       $('.image-container .overlay-content').css({
         'max-height': 'clamp(300px, 70vh, 400px)',
         'opacity': '1',
@@ -602,7 +602,7 @@
         'transition': 'none'
       });
     } else {
-      // ✅ Reset to hover behavior on desktop
+      // Reset to hover behavior on desktop
       $('.image-container .overlay-content').css({
         'max-height': '',
         'opacity': '',
@@ -665,14 +665,14 @@ function updateMenuOverlay() {
   const overlay = document.querySelector('.menu-overlay');
   
   if (header && navbar && overlay) {
-    // ✅ Force recalculate bằng cách trigger reflow
+    // Force recalculate bằng cách trigger reflow
     header.offsetHeight;
     navbar.offsetWidth;
     
     const headerHeight = header.offsetHeight;
     
     
-    // ✅ Cập nhật overlay position
+    // Cập nhật overlay position
     overlay.style.top = `${headerHeight}px`;
   
     
@@ -730,7 +730,7 @@ function updateAccommodationContent(data) {
   
   // Update both original and cloned accommodation slides
   $('.accommodation-slider .accommodation-slide').each(function(index) {
-    // ✅ Use modulo to handle cloned slides that exceed original count
+    // Use modulo to handle cloned slides that exceed original count
     const $slide = $(this);
     const imgSrc = $slide.find('.room-img').attr('src');
     
@@ -755,7 +755,7 @@ function updateWellnessContent(data) {
     'Onsen.webp': data.wellness.facilities.onsen
   };
   
-  // ✅ Update slides based on image source instead of index
+  // Update slides based on image source instead of index
   $('.we-items .item').each(function() {
     const $item = $(this);
     const imgSrc = $item.find('img').attr('src');
@@ -787,7 +787,7 @@ function applyLanguage(lang) {
   
   const currentPage = getCurrentPage();
   
-  // ✅ Update navigation
+  // Update navigation
   $('.site-menu-toggle .menu-text').text(data.nav.menu);
   $('.site-navbar .close').text(data.nav.close);
   $('.book-btn').text(data.nav.bookNow);
@@ -801,12 +801,12 @@ function applyLanguage(lang) {
   
   $('.menu-lang-item[data-lang="en"]').text(data.nav.languageEN);
   $('.menu-lang-item[data-lang="vn"]').text(data.nav.languageVN);
-  // ✅ Update hero title if exists
+  // Update hero title if exists
   if (data.hero[currentPage] && $('.site-hero .heading').length) {
     $('.site-hero .heading').html(data.hero[currentPage]);
   }
   
-  // ✅ Update embracing section with page-specific content
+  // Update embracing section with page-specific content
   const embracingData = data.embracing[currentPage];
   if (embracingData) {
     $('.embracing .heading').text(embracingData.title);
@@ -980,7 +980,7 @@ function updateDiningPage(data) {
   $('.res-list:nth-child(3) .res-item-2:nth-child(2) p').text(diningData.restaurants.pho.description);
 }
 
-// ✅ Update functions cho wellness page
+// Update functions cho wellness page
 function updateWellnessPage(data) {
   const wellnessData = data.wellness_page;
   
@@ -995,7 +995,7 @@ function updateWellnessPage(data) {
   $('.wellness-item:nth-child(3) .description').text(wellnessData.facilities.onsen.description);
 }
 
-// ✅ Update functions cho events page
+// Update functions cho events page
 function updateEventsPage(data) {
   const eventsData = data.events_page;
   
@@ -1031,7 +1031,7 @@ function updateFooter(data) {
       lenis.resize();
     }
     
-    // ✅ Trigger window resize để recalculate scroll
+    // Trigger window resize để recalculate scroll
     $(window).trigger('resize');
   }, 100);
 }
@@ -1056,7 +1056,7 @@ function updateReserveSection(data) {
   if (reserveSection.length) {
     const currentPage = getCurrentPage();
     
-    // ✅ Determine reserve data based on page
+    // Determine reserve data based on page
     let reserveData;
     
     switch(currentPage) {
@@ -1082,7 +1082,7 @@ function updateReserveSection(data) {
         reserveData = data.contact_page || {}; // fallback
     }
     
-    // ✅ Update reserve section với correct selectors
+    // Update reserve section với correct selectors
     const reserveTitle = reserveData?.reserveTitle || 
                         data.contact_page?.reserveTitle || 
                         "A Best Place To Stay. Reserve Now!";
@@ -1091,13 +1091,13 @@ function updateReserveSection(data) {
                       data.contact_page?.reserveBtn || 
                       "Reserve Now";
     
-    // ✅ Update text với đúng selectors
+    // Update text với đúng selectors
     reserveSection.find('h2').text(reserveTitle);
     reserveSection.find('a').text(reserveBtn);
     
   } 
 }
-// ✅ Apply language with transition effect
+// Apply language with transition effect
 function applyLanguageWithTransition(lang) {
   $('body').addClass('language-transition');
   
@@ -1114,12 +1114,12 @@ function applyLanguageWithTransition(lang) {
     }, 100);
   }, 150);
 
-  // ✅ Update footer
+  // Update footer
   
 }
 
 $(document).ready(function() {
-  // ✅ Initialize language system
+  // Initialize language system
   const savedLang = localStorage.getItem('dusit-language');
   const urlLang = new URLSearchParams(window.location.search).get('lang');
   
@@ -1134,13 +1134,13 @@ $(document).ready(function() {
   // Save to localStorage
   localStorage.setItem('dusit-language', currentLanguage);
   
-  // ✅ Apply language after page load
+  // Apply language after page load
   setTimeout(() => {
     applyLanguage(currentLanguage);
     updateLanguageSwitch(currentLanguage);
   }, 100);
   
-  // ✅ Language switch click handler
+  // Language switch click handler
   $('.language-switch .lang-item').on('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -1181,7 +1181,7 @@ function updateLanguageSwitch(lang) {
   updateMenuLanguageSwitch(lang);
 }
 $(document).ready(function() {
-  // ✅ Menu language switch click handler
+  // Menu language switch click handler
   $('.menu-lang-item').on('click', function(e) {
     
     const $this = $(this);
@@ -1203,15 +1203,15 @@ $(document).ready(function() {
     // Apply language with smooth transition
     applyLanguageWithTransition(lang);
     
-    // ✅ Close menu after language change on mobile
+    // Close menu after language change on mobile
     if (window.innerWidth <= 480 && $('body').hasClass('menu-open')) {
       setTimeout(() => {
         $('.site-menu-toggle').trigger('click');
-      }, 300); // ✅ Small delay for smooth transition
+      }, 300); // Small delay for smooth transition
     }
   });
   
-  // ✅ Initialize menu language switcher on page load
+  // Initialize menu language switcher on page load
   setTimeout(() => {
     updateMenuLanguageSwitch(currentLanguage);
   }, 100);
@@ -1237,7 +1237,7 @@ $(document).ready(function() {
       headerEl.style.setProperty('transition', 'transform 0.7s ease-in-out', 'important');
       headerEl.style.setProperty('transform', 'translateY(-100%)', 'important');
     } else {
-      // ✅ DESKTOP: Keep existing approach
+      // DESKTOP: Keep existing approach
       $('.js-site-header').css({
         'transform': 'translateY(-100%)',
         'transition': 'transform 0.7s ease-in-out',
@@ -1257,7 +1257,7 @@ function showHeader() {
       headerEl.style.setProperty('transition', 'transform 0.7s ease-in-out', 'important');
       headerEl.style.setProperty('transform', 'translateY(0)', 'important');
     } else {
-      // ✅ DESKTOP: Keep existing approach
+      // DESKTOP: Keep existing approach
       $('.js-site-header').css({
         'transform': 'translateY(0)',
         'transition': 'transform 0.7s ease-in-out',
@@ -1413,15 +1413,15 @@ function initializeNativeScroll() {
       isInitialized = true;
       return;
     }
-    // ✅ CRITICAL: Update isScrolled for mobile
+    // CRITICAL: Update isScrolled for mobile
     isScrolled = scrollY > 200;
     
-    // ✅ CRITICAL: Update header state for mobile
+    // CRITICAL: Update header state for mobile
     if (!isMenuOpen) {
       updateHeaderState();
     }
     
-    // ✅ CRITICAL: Apply header hide/show logic on mobile
+    // CRITICAL: Apply header hide/show logic on mobile
     throttledHeaderScroll(scrollY);
   });
 }
@@ -1446,11 +1446,11 @@ $(window).resize(function() {
     $(window).off('scroll.main');
     
     setTimeout(() => {
-      // ✅ RESTORE: Header state after initialization
+      // RESTORE: Header state after initialization
       if (wasHidden) {
-        hideHeader(); // ✅ Re-apply hide with proper transition
+        hideHeader(); // Re-apply hide with proper transition
       } else {
-        showHeader(); // ✅ Re-apply show with proper transition
+        showHeader(); // Re-apply show with proper transition
       }
       
       initializeScroll();
@@ -1527,7 +1527,7 @@ $(window).resize(function() {
     if (lenis && !isMobile) {
       currentScroll = lenis.scroll;
     } else {
-      // ✅ Native scroll for mobile
+      // Native scroll for mobile
       currentScroll = window.pageYOffset || document.documentElement.scrollTop || 0;
     }
     const actuallyScrolled = currentScroll > 200;
@@ -1544,7 +1544,7 @@ $(window).resize(function() {
   // $('.site-menu-toggle').click(function(){
   //   var $this = $(this);
   //   if ($('body').hasClass('menu-open')) {
-  //     // ✅ FIX: Close menu - lưu position trước khi thay đổi
+  //     // FIX: Close menu - lưu position trước khi thay đổi
   //     $this.removeClass('open');
   //     $('.js-site-navbar').fadeOut(400);
   //     $('body').removeClass('menu-open');
@@ -1553,12 +1553,12 @@ $(window).resize(function() {
   //     isMenuJustClosed = true;
 
 
-  //     // ✅ FIX: Remove event listeners TRƯỚC khi restore scroll
+  //     // FIX: Remove event listeners TRƯỚC khi restore scroll
   //     $(window).off('wheel.menuOpen touchmove.menuOpen scroll.menuOpen');
   //     $(document).off('keydown.menuOpen');
 
   //     if(!isMobile && lenis && typeof lenis.start === 'function'){
-  //       // ✅ FIX: Cải thiện logic restore scroll position
+  //       // FIX: Cải thiện logic restore scroll position
   //       const currentBodyTop = $('body').css('top');
   //       let scrollY = 0;
         
@@ -1566,7 +1566,7 @@ $(window).resize(function() {
   //         scrollY = Math.abs(parseInt(currentBodyTop) || 0);
   //       }
         
-  //       // ✅ Reset styles trước khi scroll
+  //       // Reset styles trước khi scroll
   //       $('body').css({
   //         'position': '',
   //         'top': '',
@@ -1574,12 +1574,12 @@ $(window).resize(function() {
   //       });
   //       $('html').css('overflow', '');
         
-  //       // ✅ Đảm bảo scrollY hợp lệ trước khi áp dụng
+  //       // Đảm bảo scrollY hợp lệ trước khi áp dụng
   //       if (scrollY > 0 && scrollY < document.documentElement.scrollHeight) {
   //         window.scrollTo(0, scrollY);
   //       }
         
-  //       // ✅ Restart Lenis sau khi đã restore position
+  //       // Restart Lenis sau khi đã restore position
   //       setTimeout(() => {
   //       if (lenis && typeof lenis.start === 'function') {
   //         try {
@@ -1594,12 +1594,12 @@ $(window).resize(function() {
   //       const currentBodyTop = $('body').css('top');
   //     let scrollY = 0;
       
-  //     // ✅ Get stored scroll position from body top
+  //     // Get stored scroll position from body top
   //     if (currentBodyTop && currentBodyTop !== 'auto') {
   //       scrollY = Math.abs(parseInt(currentBodyTop) || 0);
   //     }
 
-  //       // ✅ Mobile: Reset scroll đơn giản
+  //       // Mobile: Reset scroll đơn giản
   //       $('body').css({
   //         'position': '',
   //         'top': '',
@@ -1624,7 +1624,7 @@ $(window).resize(function() {
       
       
   //   } else {
-  //     // ✅ FIX: Open menu - cải thiện logic lưu position
+  //     // FIX: Open menu - cải thiện logic lưu position
   //     let currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
       
   //     if (isMobile && isHeaderHidden) {
@@ -1690,7 +1690,7 @@ $(window).resize(function() {
   //           return false;
   //         }
   //       });
-  //       requestAnimationFrame(() => {// ✅ Apply fixed position with stored scroll
+  //       requestAnimationFrame(() => {// Apply fixed position with stored scroll
   //     $('body').css({
   //       'overflow': 'hidden',
   //       'position': 'fixed',
@@ -1723,15 +1723,15 @@ $(window).resize(function() {
       scrollY = Math.abs(parseInt(bodyTop) || 0);
   
     }
-    // ✅ CRITICAL: Remove all classes immediately
+    // CRITICAL: Remove all classes immediately
     $('body').removeClass('menu-open');
     $('html').removeClass('menu-open');
     
-    // ✅ CRITICAL: Remove ALL possible event listeners
+    // CRITICAL: Remove ALL possible event listeners
     $(window).off('scroll.menuOpen touchmove.menuOpen wheel.menuOpen touchstart.menuOpen');
     $(document).off('keydown.menuOpen touchstart.menuOpen touchmove.menuOpen');
     
-    // ✅ CRITICAL: Reset ALL styles completely
+    // CRITICAL: Reset ALL styles completely
     $('body, html').css({
       'position': '',
       'top': '',
@@ -1759,7 +1759,7 @@ $(window).resize(function() {
         document.documentElement.scrollTop = scrollY;
       }, 10);
     }
-    // ✅ Restart Lenis if available
+    // Restart Lenis if available
     if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
       setTimeout(() => {
         try {
@@ -1775,7 +1775,7 @@ $(window).resize(function() {
 
     
   } else {
-    // ✅ OPEN MENU - CSS-only approach
+    // OPEN MENU - CSS-only approach
     const currentScroll = window.pageYOffset || 
                          document.documentElement.scrollTop || 
                          document.body.scrollTop || 0;
@@ -1797,7 +1797,7 @@ $(window).resize(function() {
     if (isMobile) {
       $('body').css({
         'position': 'fixed',
-        'top': `-${currentScroll}px`, // ✅ Store scroll position
+        'top': `-${currentScroll}px`, // Store scroll position
         'left': '0',
         'right': '0',
         'width': '100%',
@@ -1810,7 +1810,7 @@ $(window).resize(function() {
         'touch-action': 'none'
       });
     } else {
-      // ✅ DESKTOP: Stop Lenis and apply position
+      // DESKTOP: Stop Lenis and apply position
       if (typeof lenis !== 'undefined' && lenis && typeof lenis.stop === 'function') {
         lenis.stop();
       }
@@ -1829,7 +1829,7 @@ $(window).resize(function() {
   }
 });
 
-// ✅ ADD: Emergency cleanup function
+// ADD: Emergency cleanup function
 function forceCleanupMenu() {
   
   const bodyTop = $('body').css('top');
@@ -1891,7 +1891,7 @@ function forceCleanupMenu() {
 
 }
 
-// ✅ ADD: Auto cleanup on page load
+// ADD: Auto cleanup on page load
 $(document).ready(function() {
   setTimeout(forceCleanupMenu, 500);
   
@@ -1907,14 +1907,14 @@ $(document).ready(function() {
     }
   });
 });
-  // ✅ THÊM click overlay để đóng menu
+  // THÊM click overlay để đóng menu
 $('.menu-overlay').click(function() {
   if ($('body').hasClass('menu-open')) {
     $('.site-menu-toggle').trigger('click'); // Trigger close menu
   }
 });
 
-// ✅ THÊM ESC key để đóng menu
+// THÊM ESC key để đóng menu
 $(document).keydown(function(e) {
   if (e.key === "Escape" && $('body').hasClass('menu-open')) {
     $('.site-menu-toggle').trigger('click'); // Trigger close menu
@@ -2025,30 +2025,30 @@ accommodationSlider.owlCarousel({
   // Tắt tất cả hiệu ứng fade
   animateOut: false, // Tắt animateOut
   animateIn: false,  // Tắt animateIn
-  touchDrag: true,      // ✅ Enable touch drag
-  mouseDrag: true,      // ✅ Enable mouse drag  
-  pullDrag: true,       // ✅ Enable pull drag
+  touchDrag: true,      // Enable touch drag
+  mouseDrag: true,      // Enable mouse drag  
+  pullDrag: true,       // Enable pull drag
   freeDrag: false, 
-  touchTreshold: 100,   // ✅ Minimum distance for touch to trigger slide
-  dotsSpeed: 400,       // ✅ Speed for dot navigation
+  touchTreshold: 100,   // Minimum distance for touch to trigger slide
+  dotsSpeed: 400,       // Speed for dot navigation
   dragEndSpeed: 400, 
   responsive: {
     0: {
       items: 1, // Mobile: 1 item
       margin: 20,
       stagePadding: 0,
-      touchDrag: true,     // ✅ Enable touch on mobile
-      mouseDrag: false,    // ✅ Disable mouse on mobile
-      pullDrag: true,      // ✅ Enable pull
+      touchDrag: true,     // Enable touch on mobile
+      mouseDrag: false,    // Disable mouse on mobile
+      pullDrag: true,      // Enable pull
       dots: true,
       dotsSpeed: 300, 
-      autoplay: true,      // ✅ Enable autoplay on mobile
+      autoplay: true,      // Enable autoplay on mobile
     },
     600: {
       items: 1, // Tablet: 1 item
       margin: 30,
       stagePadding: 0,
-      touchDrag: true,     // ✅ Enable touch on tablet
+      touchDrag: true,     // Enable touch on tablet
       mouseDrag: true, 
       dots: true,
       dotsSpeed: 300, 
@@ -2059,7 +2059,7 @@ accommodationSlider.owlCarousel({
       items: 1, // Tablet: 1 item
       margin: 30,
       stagePadding: 20,
-      touchDrag: true,     // ✅ Enable touch on tablet
+      touchDrag: true,     // Enable touch on tablet
       mouseDrag: true, 
      
     },
@@ -2067,7 +2067,7 @@ accommodationSlider.owlCarousel({
       items: 2, // Desktop: 2 items
       margin: 40,
       stagePadding: 0,
-      touchDrag: true,    // ✅ Disable touch on desktop
+      touchDrag: true,    // Disable touch on desktop
       mouseDrag: true,
       dots: false,  
     }
@@ -2130,13 +2130,13 @@ weSlider.owlCarousel({
   center: true,
   animateOut: false,
   animateIn: false,
-  touchDrag: true,      // ✅ Enable touch drag
-  mouseDrag: true,      // ✅ Enable mouse drag
-  pullDrag: true,       // ✅ Enable pull drag
-  freeDrag: false,      // ✅ Disable free drag
+  touchDrag: true,      // Enable touch drag
+  mouseDrag: true,      // Enable mouse drag
+  pullDrag: true,       // Enable pull drag
+  freeDrag: false,      // Disable free drag
   stagePadding: 0,
 
-  touchTreshold: 100,   // ✅ Minimum swipe distance
+  touchTreshold: 100,   // Minimum swipe distance
   dotsSpeed: 400,
   dragEndSpeed: 400,
   responsive: {
@@ -2144,8 +2144,8 @@ weSlider.owlCarousel({
       items: 1, // Mobile: 1 item
       margin: 20,
       smartSpeed: 1000,
-      touchDrag: true,     // ✅ Enable touch on mobile
-      mouseDrag: false,    // ✅ Disable mouse on mobile
+      touchDrag: true,     // Enable touch on mobile
+      mouseDrag: false,    // Disable mouse on mobile
       pullDrag: true,
       dots: true,
       dotsSpeed: 300,
@@ -2155,7 +2155,7 @@ weSlider.owlCarousel({
       items: 1, // Tablet: 1 item  
       margin: 50,
       smartSpeed: 1100,
-      touchDrag: true,     // ✅ Enable touch on tablet
+      touchDrag: true,     // Enable touch on tablet
       mouseDrag: true,
       dots: true,
       dotsSpeed: 300,
@@ -2366,7 +2366,7 @@ $(document).ready(function() {
   const isMobileDevice = window.innerWidth < 1024;
   
   if (isMobileDevice) {
-    // ✅ MOBILE: Enable AOS với settings tối ưu cho mobile
+    // MOBILE: Enable AOS với settings tối ưu cho mobile
     AOS.init({
       duration: 800,        // Nhanh hơn cho mobile
       easing: 'ease-in-out',
@@ -2382,7 +2382,7 @@ $(document).ready(function() {
       throttleDelay: 99
     });
   } else {
-    // ✅ DESKTOP: Settings như cũ
+    // DESKTOP: Settings như cũ
     AOS.init({
       duration: 1000,
       easing: 'ease-in-out',
@@ -2396,16 +2396,16 @@ $(document).ready(function() {
   }
 }
 
-// ✅ Initialize AOS
+// Initialize AOS
 initAOS();
 
-// ✅ Reinitialize AOS on window resize
+// Reinitialize AOS on window resize
 $(window).resize(function() {
-  // ✅ Debounce resize để tránh spam
+  // Debounce resize để tránh spam
   clearTimeout(window.aosResizeTimeout);
   window.aosResizeTimeout = setTimeout(() => {
     initAOS();
-    AOS.refresh(); // ✅ Refresh để recalculate positions
+    AOS.refresh(); // Refresh để recalculate positions
   }, 150);
 });
 // For about.html
