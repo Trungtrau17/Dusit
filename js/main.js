@@ -14,7 +14,6 @@
   let isMobile = $(window).width() < 1200;
   let lenis = null;
   let rafId = null;
-  let currentLanguage = 'en';
 
   // const languageData = {
   //   en: {
@@ -645,20 +644,7 @@
     });
     
   });
-function getScrollbarWidth() {
-  const div = document.createElement('div');
-  div.style.width = '100px';
-  div.style.height = '100px';
-  div.style.overflow = 'scroll';
-  div.style.position = 'absolute';
-  div.style.top = '-9999px';
-  document.body.appendChild(div);
-  
-  const scrollbarWidth = div.offsetWidth - div.clientWidth;
-  document.body.removeChild(div);
-  
-  return scrollbarWidth;
-}
+
 function updateMenuOverlay() {
   const header = document.querySelector('.site-header');
   const navbar = document.querySelector('.site-navbar');
@@ -670,552 +656,14 @@ function updateMenuOverlay() {
     navbar.offsetWidth;
     
     const headerHeight = header.offsetHeight;
-    
-    
     // Cập nhật overlay position
     overlay.style.top = `${headerHeight}px`;
-  
-    
-    
   }
 }
 
 // Cập nhật khi resize
 $(window).resize(updateMenuOverlay);
 $(document).ready(updateMenuOverlay);
-$(document).ready(function() {
-  // Get saved language from localStorage
-  const savedLang = localStorage.getItem('dusit-language');
-  if (savedLang && languageData[savedLang]) {
-    currentLanguage = savedLang;
-  } else {
-    // Auto-detect browser language if no saved preference
-    currentLanguage = detectBrowserLanguage();
-    localStorage.setItem('dusit-language', currentLanguage);
-  }
-  
-});
-
-function getCurrentPage() {
-  const path = window.location.pathname;
-  const filename = path.split('/').pop().replace('.html', '');
-  
-  // Map filenames to page identifiers
-  const pageMap = {
-    'index': 'home',
-    '': 'home',
-    'about': 'about',
-    'collection': 'collection',
-    'dining': 'dining',
-    'wellness': 'wellness',
-    'events': 'events',
-    'contact': 'contact'
-  };
-  
-  return pageMap[filename] || 'home';
-}
-function detectBrowserLanguage() {
-  const browserLang = navigator.language || navigator.userLanguage;
-  return browserLang.startsWith('vi') ? 'vn' : 'en';
-}
-
-function updateAccommodationContent(data) {
-  // Map room data for easier access
-  const roomMapping = {
-    'Deluxe.webp': data.accommodation.rooms.deluxe,
-    'Junior.webp': data.accommodation.rooms.junior,
-    'Superior.webp': data.accommodation.rooms.superior,
-    'One_bedroom_suite.webp': data.accommodation.rooms.oneBedroom
-  };
-  
-  // Update both original and cloned accommodation slides
-  $('.accommodation-slider .accommodation-slide').each(function(index) {
-    // Use modulo to handle cloned slides that exceed original count
-    const $slide = $(this);
-    const imgSrc = $slide.find('.room-img').attr('src');
-    
-    // Extract filename from src
-    const filename = imgSrc ? imgSrc.split('/').pop() : '';
-    
-    // Find matching room data
-    const roomData = roomMapping[filename];
-    
-    if (roomData) {
-      $slide.find('.room-info h2').text(roomData.title);
-      $slide.find('.room-info span').text(roomData.description);
-      $slide.find('.room-info .view-btn').text(data.accommodation.viewMore);
-    }
-  });
-}
-function updateWellnessContent(data) {
-  // Map wellness facility data
-  const facilityMapping = {
-    'Fitness_Centre_resize.webp': data.wellness.facilities.gym,
-    'hoboi_new.webp': data.wellness.facilities.pool,
-    'Onsen.webp': data.wellness.facilities.onsen
-  };
-  
-  // Update slides based on image source instead of index
-  $('.we-items .item').each(function() {
-    const $item = $(this);
-    const imgSrc = $item.find('img').attr('src');
-    
-    // Extract filename from src
-    const filename = imgSrc ? imgSrc.split('/').pop() : '';
-    
-    // Find matching facility data
-    const facilityData = facilityMapping[filename];
-    
-    if (facilityData) {
-      $item.find('.overlay-text h3').text(facilityData.title);
-      $item.find('.overlay-text p').text(facilityData.description);
-    }
-  });
-}
-function updateEventsContent(data) {
-  // Update MICE content trong section .ev
-  $('.ev .overlay-text h3').text(data.events.facilities.mice.title);
-  $('.ev .overlay-text p').text(data.events.facilities.mice.description);
-  $('.ev .overlay-text .collection-btn').text(data.accommodation.viewMore);
-}
-function applyLanguage(lang) {
-  const data = languageData[lang];
-  if (!data) {
-    console.warn(`Language data not found for: ${lang}`);
-    return;
-  }
-  
-  const currentPage = getCurrentPage();
-  
-  // Update navigation
-  $('.site-menu-toggle .menu-text').text(data.nav.menu);
-  $('.site-navbar .close').text(data.nav.close);
-  $('.book-btn').text(data.nav.bookNow);
-  
-  $('.site-navbar .menu li:nth-child(1) a').text(data.nav.about);
-  $('.site-navbar .menu li:nth-child(2) a').text(data.nav.collection);
-  $('.site-navbar .menu li:nth-child(3) a').text(data.nav.dining);
-  $('.site-navbar .menu li:nth-child(4) a').text(data.nav.wellness);
-  $('.site-navbar .menu li:nth-child(5) a').text(data.nav.events);
-  $('.site-navbar .menu li:nth-child(6) a').text(data.nav.contact);
-  
-  $('.menu-lang-item[data-lang="en"]').text(data.nav.languageEN);
-  $('.menu-lang-item[data-lang="vn"]').text(data.nav.languageVN);
-  // Update hero title if exists
-  if (data.hero[currentPage] && $('.site-hero .heading').length) {
-    $('.site-hero .heading').html(data.hero[currentPage]);
-  }
-  
-  // Update embracing section with page-specific content
-  const embracingData = data.embracing[currentPage];
-  if (embracingData) {
-    $('.embracing .heading').text(embracingData.title);
-    $('.embracing .embracing-content').text(embracingData.content);
-    
-    // Update button only if it exists and has text
-    if (embracingData.button && $('.collection-btn').length) {
-      $('.collection-btn').text(embracingData.button);
-    }
-  }
-  
-  switch(currentPage) {
-    case 'home':
-      updateHomePage(data);
-      break;
-    case 'contact':
-      updateContactPage(data);
-      break;
-    case 'collection':
-      updateCollectionPage(data);
-      break;
-    case 'about':
-      updateAboutPage(data);
-      break;
-    case 'dining':
-      updateDiningPage(data);
-      break;
-    case 'wellness':
-      updateWellnessPage(data);
-      break;
-    case 'events':
-      updateEventsPage(data);
-      break;
-  }
-
-  updateFooter(data);
-
-  updateBreadcrumbs(data, currentPage);
-  
-  updateReserveSection(data);
-  
-}
-function updateHomePage(data) {
-  // Accommodation section
-  if ($('.accommodation .heading').length) {
-    $('.accommodation .heading').text(data.accommodation.title);
-    updateAccommodationContent(data);
-  }
-  
-  // Dining section
-  if ($('.dining-text .heading').length) {
-    $('.dining-text .heading').text(data.dining.title);
-    $('.dining-text p').text(data.dining.subtitle);
-    $('.site-dining h4').text(data.dining.hero);
-    
-    $('.dining-items .public-area:nth-child(1) h2').text(data.dining.restaurants.soi.title);
-    $('.dining-items .public-area:nth-child(1) span').text(data.dining.restaurants.soi.description);
-    $('.dining-items .public-area:nth-child(1) .view-btn').text(data.accommodation.viewMore);
-    
-    $('.dining-items .public-area:nth-child(2) h2').text(data.dining.restaurants.gourmet.title);
-    $('.dining-items .public-area:nth-child(2) span').text(data.dining.restaurants.gourmet.description);
-    $('.dining-items .public-area:nth-child(2) .view-btn').text(data.accommodation.viewMore);
-    
-    $('.dining-items .public-area:nth-child(3) h2').text(data.dining.restaurants.palais.title);
-    $('.dining-items .public-area:nth-child(3) span').text(data.dining.restaurants.palais.description);
-    $('.dining-items .public-area:nth-child(3) .view-btn').text(data.accommodation.viewMore);
-  }
-  
-  // Wellness section
-  if ($('.section-2 .title .heading').length) {
-    $('.section-2 .title .heading').text(data.wellness.title);
-    updateWellnessContent(data);
-  }
-  
-  // Events section
-  if ($('.ev .heading').length) {
-    $('.ev .heading').text(data.events.title);
-    updateEventsContent(data);
-  }
-}
-function updateContactPage(data) {
-  const contactData = data.contact_page;
-  
-  // Location section
-  $('.location .heading').text(contactData.locationTitle);
-  $('.location .embracing-content').text(contactData.locationContent);
-  
-  // Map section
-  $('.location-text span').text(contactData.mapTitle);
-  $('.location-des p:nth-child(1)').text(contactData.address);
-  $('.location-des p:nth-child(2)').text(contactData.phone);
-  $('.location-des p:nth-child(3)').text(contactData.email);
-  $('.direct-btn').text(contactData.directions);
-}
-function updateCollectionPage(data) {
-  const collectionData = data.collection_page;
-  
-  // Main heading
-  $('.collection .heading').text(collectionData.title);
-  $('.collection .embracing-content').text(collectionData.content);
-  
-  // Room items
-  $('.room-item:nth-child(1) h3').text(collectionData.rooms.superior.title);
-  $('.room-item:nth-child(1) .para-value:nth-child(1) span').text(collectionData.rooms.superior.size);
-  $('.room-item:nth-child(1) .para-value:nth-child(2) span').text(collectionData.rooms.superior.quantity);
-  $('.room-item:nth-child(1) p').text(collectionData.rooms.superior.description);
-  
-  $('.room-item:nth-child(2) h3').text(collectionData.rooms.deluxe.title);
-  $('.room-item:nth-child(2) .para-value:nth-child(1) span').text(collectionData.rooms.deluxe.size);
-  $('.room-item:nth-child(2) .para-value:nth-child(2) span').text(collectionData.rooms.deluxe.quantity);
-  $('.room-item:nth-child(2) p').text(collectionData.rooms.deluxe.description);
-  
-  $('.room-item:nth-child(3) h3').text(collectionData.rooms.junior.title);
-  $('.room-item:nth-child(3) .para-value:nth-child(1) span').text(collectionData.rooms.junior.size);
-  $('.room-item:nth-child(3) .para-value:nth-child(2) span').text(collectionData.rooms.junior.quantity);
-  $('.room-item:nth-child(3) p').text(collectionData.rooms.junior.description);
-  
-  $('.room-item:nth-child(4) h3').text(collectionData.rooms.oneBedroom.title);
-  $('.room-item:nth-child(4) .para-value:nth-child(1) span').text(collectionData.rooms.oneBedroom.size);
-  $('.room-item:nth-child(4) .para-value:nth-child(2) span').text(collectionData.rooms.oneBedroom.quantity);
-  $('.room-item:nth-child(4) p').text(collectionData.rooms.oneBedroom.description);
-  
-  // Labels
-  $('.para-value h4').each(function(index) {
-    if (index % 2 === 0) {
-      $(this).text(collectionData.roomLabels.size);
-    } else {
-      $(this).text(collectionData.roomLabels.quantity);
-    }
-  });
-}
-function updateAboutPage(data) {
-  const aboutData = data.about_page;
-
-  // Main story section
-  $('.dining .heading').text(aboutData.story);
-  $('.dining .embracing-content').text(aboutData.storyContent);
-  
-  // About content sections
-  $('.about-item:nth-child(1) .about-title').text(aboutData.sections.historical.title);
-  $('.about-item:nth-child(1) .description').text(aboutData.sections.historical.content);
-  
-  $('.about-item-2 .about-title').text(aboutData.sections.architectural.title);
-  $('.about-item-2 .description').text(aboutData.sections.architectural.content);
-  
-  $('.about-item:nth-child(3) .about-title').text(aboutData.sections.location.title);
-  $('.about-item:nth-child(3) .description').text(aboutData.sections.location.content);
-}
-function updateDiningPage(data) {
-  const diningData = data.dining_page;
-  
-  // Distinguished dining section
-  $('.dining-service .title .heading').text(diningData.distinguishedTitle);
-  $('.dining-service .title .sub-heading').text(diningData.distinguishedSubtitle);
-  
-  // Restaurant items - first row
-  $('.res-list:nth-child(2) .res-item:nth-child(1) h3').text(diningData.restaurants.soi.title);
-  $('.res-list:nth-child(2) .res-item:nth-child(1) p').text(diningData.restaurants.soi.description);
-  
-  $('.res-list:nth-child(2) .res-item:nth-child(2) h3').text(diningData.restaurants.gourmet.title);
-  $('.res-list:nth-child(2) .res-item:nth-child(2) p').text(diningData.restaurants.gourmet.description);
-  
-  $('.res-list:nth-child(2) .res-item:nth-child(3) h3').text(diningData.restaurants.palais.title);
-  $('.res-list:nth-child(2) .res-item:nth-child(3) p').text(diningData.restaurants.palais.description);
-  
-  // Restaurant items - second row 
-  $('.res-list:nth-child(3) .res-item-2:nth-child(1) h3').text(diningData.restaurants.vinci.title);
-  $('.res-list:nth-child(3) .res-item-2:nth-child(1) p').text(diningData.restaurants.vinci.description);
-  
-  $('.res-list:nth-child(3) .res-item-2:nth-child(2) h3').text(diningData.restaurants.pho.title);
-  $('.res-list:nth-child(3) .res-item-2:nth-child(2) p').text(diningData.restaurants.pho.description);
-}
-
-// Update functions cho wellness page
-function updateWellnessPage(data) {
-  const wellnessData = data.wellness_page;
-  
-  // Wellness items
-  $('.wellness-item:nth-child(1) .wellness-title').text(wellnessData.facilities.fitness.title);
-  $('.wellness-item:nth-child(1) .description').text(wellnessData.facilities.fitness.description);
-  
-  $('.wellness-item:nth-child(2) .wellness-title').text(wellnessData.facilities.pool.title);
-  $('.wellness-item:nth-child(2) .description').text(wellnessData.facilities.pool.description);
-
-  $('.wellness-item:nth-child(3) .wellness-title').text(wellnessData.facilities.onsen.title);
-  $('.wellness-item:nth-child(3) .description').text(wellnessData.facilities.onsen.description);
-}
-
-// Update functions cho events page
-function updateEventsPage(data) {
-  const eventsData = data.events_page;
-  
-  // Main subtitle
-  $('.collection .embracing-content').text(eventsData.subtitle);
-  
-  // Events facilities
-  $('.events-item:nth-child(1) .events-title').text(eventsData.facilities.ballroom.title);
-  $('.events-item:nth-child(1) .description').text(eventsData.facilities.ballroom.description);
-  
-  $('.events-item-2 .events-title').text(eventsData.facilities.meeting.title);
-  $('.events-item-2 .description').text(eventsData.facilities.meeting.description);
-}
-function updateFooter(data) {
-  $('.footer-content .Explore .title').text(data.footer.explore.title);
-  $('.footer-content .follow-us .title').text(data.footer.followUs.title);
-  $('.footer-content .get-in-touch .title').text(data.footer.contact.title);
-  
-  $('.footer-content .Explore .link li:nth-child(1) a').text(data.footer.explore.links[0]);
-  $('.footer-content .Explore .link li:nth-child(2) a').text(data.footer.explore.links[1]);
-  $('.footer-content .Explore .link li:nth-child(3) a').text(data.footer.explore.links[2]);
-  
-  $('.get-in-touch .link li:nth-child(1) p').html(data.footer.contact.address);
-  $('.get-in-touch .link li:nth-child(2) p').text(data.footer.contact.phone);
-  $('.get-in-touch .link li:nth-child(3) p').text(data.footer.contact.email);
-
-  $('.newsletter-title').text(data.footer.newsletter.title);
-  $('.footer-newsletter input').attr('placeholder', data.footer.newsletter.placeholder);
-
-  $('.copyright').html(`&copy; 2025 ${data.footer.copyright}`);
-  setTimeout(() => {
-    if (typeof lenis !== 'undefined' && lenis && typeof lenis.resize === 'function') {
-      lenis.resize();
-    }
-    
-    // Trigger window resize để recalculate scroll
-    $(window).trigger('resize');
-  }, 100);
-}
-function updateBreadcrumbs(data, currentPage) {
-  const breadcrumbMap = {
-    'contact': data.contact_page?.breadcrumb || 'Contact',
-    'collection': data.collection_page?.breadcrumb || 'Our Collection',
-    'about': data.about_page?.breadcrumb || 'About', 
-    'dining': data.dining_page?.breadcrumb || 'Dining',
-    'wellness': data.wellness_page?.breadcrumb || 'Wellness',
-    'events': data.events_page?.breadcrumb || 'Events'
-  };
-  
-  if (breadcrumbMap[currentPage]) {
-    $('.breadcrumb-nav .current').text(breadcrumbMap[currentPage]);
-  }
-}
-
-function updateReserveSection(data) {
-  const reserveSection = $('.section.bg-image.overlay');
-  
-  if (reserveSection.length) {
-    const currentPage = getCurrentPage();
-    
-    // Determine reserve data based on page
-    let reserveData;
-    
-    switch(currentPage) {
-      case 'contact':
-        reserveData = data.contact_page;
-        break;
-      case 'collection':
-        reserveData = data.collection_page;
-        break;
-      case 'about':
-        reserveData = data.about_page;
-        break;
-      case 'dining':
-        reserveData = data.dining_page;
-        break;
-      case 'wellness':
-        reserveData = data.wellness_page;
-        break;
-      case 'events':
-        reserveData = data.events_page;
-        break;
-      default:
-        reserveData = data.contact_page || {}; // fallback
-    }
-    
-    // Update reserve section với correct selectors
-    const reserveTitle = reserveData?.reserveTitle || 
-                        data.contact_page?.reserveTitle || 
-                        "A Best Place To Stay. Reserve Now!";
-                        
-    const reserveBtn = reserveData?.reserveBtn || 
-                      data.contact_page?.reserveBtn || 
-                      "Reserve Now";
-    
-    // Update text với đúng selectors
-    reserveSection.find('h2').text(reserveTitle);
-    reserveSection.find('a').text(reserveBtn);
-    
-  } 
-}
-// Apply language with transition effect
-function applyLanguageWithTransition(lang) {
-  $('body').addClass('language-transition');
-  
-  setTimeout(() => {
-    applyLanguage(lang);
-    
-    // Refresh carousel content if needed
-    if (typeof refreshCarouselContent === 'function') {
-      refreshCarouselContent();
-    }
-    
-    setTimeout(() => {
-      $('body').removeClass('language-transition');
-    }, 100);
-  }, 150);
-
-  // Update footer
-  
-}
-
-$(document).ready(function() {
-  // Initialize language system
-  const savedLang = localStorage.getItem('dusit-language');
-  const urlLang = new URLSearchParams(window.location.search).get('lang');
-  
-  if (urlLang && languageData[urlLang]) {
-    currentLanguage = urlLang;
-  } else if (savedLang && languageData[savedLang]) {
-    currentLanguage = savedLang;
-  } else {
-    currentLanguage = detectBrowserLanguage();
-  }
-  
-  // Save to localStorage
-  localStorage.setItem('dusit-language', currentLanguage);
-  
-  // Apply language after page load
-  setTimeout(() => {
-    applyLanguage(currentLanguage);
-    updateLanguageSwitch(currentLanguage);
-  }, 100);
-  
-  // Language switch click handler
-  $('.language-switch .lang-item').on('click', function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-    
-    const $this = $(this);
-    const lang = $this.data('lang');
-    
-    
-    if (!lang || lang === currentLanguage) {
-      return;
-    }
-    
-    // Update active state
-    updateLanguageSwitch(lang);
-    
-    // Update current language
-    currentLanguage = lang;
-    
-    // Save to localStorage
-    localStorage.setItem('dusit-language', lang);
-    
-    // Apply language with smooth transition
-    applyLanguageWithTransition(lang);
-  });
-});
-function updateMenuLanguageSwitch(lang) {
-  $('.menu-lang-item').removeClass('active');
-  $(`.menu-lang-item[data-lang="${lang}"]`).addClass('active');
-}
-
-// Cập nhật function updateLanguageSwitch để handle cả header và menu
-function updateLanguageSwitch(lang) {
-  // Update header language switch
-  $('.language-switch .lang-item').removeClass('active');
-  $(`.language-switch .lang-item[data-lang="${lang}"]`).addClass('active');
-  
-  // Update menu language switch
-  updateMenuLanguageSwitch(lang);
-}
-$(document).ready(function() {
-  // Menu language switch click handler
-  $('.menu-lang-item').on('click', function(e) {
-    
-    const $this = $(this);
-    const lang = $this.data('lang');
-    
-    if (!lang || lang === currentLanguage) {
-      return;
-    }
-    
-    // Update active state for both header and menu
-    updateLanguageSwitch(lang);
-    
-    // Update current language
-    currentLanguage = lang;
-    
-    // Save to localStorage
-    localStorage.setItem('dusit-language', lang);
-    
-    // Apply language with smooth transition
-    applyLanguageWithTransition(lang);
-    
-    // Close menu after language change on mobile
-    if (window.innerWidth <= 480 && $('body').hasClass('menu-open')) {
-      setTimeout(() => {
-        $('.site-menu-toggle').trigger('click');
-      }, 300); // Small delay for smooth transition
-    }
-  });
-  
-  // Initialize menu language switcher on page load
-  setTimeout(() => {
-    updateMenuLanguageSwitch(currentLanguage);
-  }, 100);
-});
   // Optimized throttle
   function throttle(func, limit) {
     let inThrottle;
@@ -1315,7 +763,6 @@ function showHeader() {
     try {
       lenis.destroy();
     } catch (e) {
-     
     }
   }
   lenis = null;
@@ -1544,7 +991,6 @@ $(window).resize(function() {
   // $('.site-menu-toggle').click(function(){
   //   var $this = $(this);
   //   if ($('body').hasClass('menu-open')) {
-  //     // FIX: Close menu - lưu position trước khi thay đổi
   //     $this.removeClass('open');
   //     $('.js-site-navbar').fadeOut(400);
   //     $('body').removeClass('menu-open');
@@ -1553,12 +999,12 @@ $(window).resize(function() {
   //     isMenuJustClosed = true;
 
 
-  //     // FIX: Remove event listeners TRƯỚC khi restore scroll
+  
   //     $(window).off('wheel.menuOpen touchmove.menuOpen scroll.menuOpen');
   //     $(document).off('keydown.menuOpen');
 
   //     if(!isMobile && lenis && typeof lenis.start === 'function'){
-  //       // FIX: Cải thiện logic restore scroll position
+
   //       const currentBodyTop = $('body').css('top');
   //       let scrollY = 0;
         
@@ -1624,7 +1070,7 @@ $(window).resize(function() {
       
       
   //   } else {
-  //     // FIX: Open menu - cải thiện logic lưu position
+
   //     let currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
       
   //     if (isMobile && isHeaderHidden) {
@@ -1669,7 +1115,6 @@ $(window).resize(function() {
   //       // Stop Lenis sau khi đã lock events
   //       lenis.stop();
         
-  //       // Áp dụng fixed position với scroll position chính xác
   //       $('body').css({
   //         'position': 'fixed',
   //         'top': `-${scrollPosition}px`,
@@ -1690,7 +1135,7 @@ $(window).resize(function() {
   //           return false;
   //         }
   //       });
-  //       requestAnimationFrame(() => {// Apply fixed position with stored scroll
+  //       requestAnimationFrame(() => {
   //     $('body').css({
   //       'overflow': 'hidden',
   //       'position': 'fixed',
@@ -2213,6 +1658,8 @@ weSlider.owlCarousel({
 $(document).ready(function(){
   var diningSlider = $('.dining-slider');
   let isDiningSliding = false;
+  let currentDiningDotIndex = 0;
+  let totalDiningDots = 2;
   if (diningSlider.length) {
     diningSlider.owlCarousel({
       loop: true,
@@ -2270,24 +1717,165 @@ $(document).ready(function(){
         }
       }
     });
-    diningSlider.on('translate.owl.carousel', function(event) {
-      isDiningSliding = true;
+    function updateDiningProgressBar(dotIndex) {
+      const progressBar = diningSlider.find('.owl-dots');
+      
+      if (progressBar.length) {
+        // Calculate positions for 6 slides: 0%, 16.666%, 33.333%, 50%, 66.666%, 83.333%
+        const positions = [0, 50];
+        const position = positions[dotIndex] || 0;
+        
+        // Set CSS variable and class
+        progressBar.css('--dining-active-position', position + '%');
+        progressBar[0].style.setProperty('--dining-active-position', position + '%');
+        
+        progressBar.removeClass('dining-position-0 dining-position-1 dining-position-2 dining-position-3 dining-position-4 dining-position-5');
+        progressBar.addClass(`dining-position-${dotIndex}`);
+        
+        currentDiningDotIndex = dotIndex;
+        
+        // Force repaint
+        progressBar[0].offsetHeight;
+      }
+    }
+    
+    // Monitor dining dots changes
+    function watchDiningDotsChanges() {
+      const dotsContainer = diningSlider.find('.owl-dots')[0];
+      
+      if (dotsContainer) {
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              checkActiveDiningDot();
+            }
+          });
+        });
+        
+        // Observe all dot elements
+        const dots = diningSlider.find('.owl-dots .owl-dot');
+        dots.each(function(index) {
+          observer.observe(this, {
+            attributes: true,
+            attributeFilter: ['class']
+          });
+        });
+        
+        // Initial check
+        setTimeout(() => {
+          checkActiveDiningDot();
+        }, 100);
+      }
+    }
+    
+    // Function to check which dining dot is active
+    function checkActiveDiningDot() {
+      const activeDot = diningSlider.find('.owl-dots .owl-dot.active');
+      
+      if (activeDot.length) {
+        const allDots = diningSlider.find('.owl-dots .owl-dot');
+        const activeDotIndex = allDots.index(activeDot);
+        
+        if (activeDotIndex !== -1 && activeDotIndex !== currentDiningDotIndex) {
+          updateDiningProgressBar(activeDotIndex);
+
+        }
+      }
+    }
+    
+    // Initialize dining slider
+    diningSlider.on('initialized.owl.carousel', function(event) {
+      
+      // Start watching dots after initialization
+      setTimeout(() => {
+        watchDiningDotsChanges();
+        updateDiningProgressBar(0); // Set initial position
+      }, 200);
     });
+    
+    // Backup: Also listen to carousel events
+    diningSlider.on('changed.owl.carousel', function(event) {
+      setTimeout(() => {
+        checkActiveDiningDot();
+      }, 50);
+    });
+    
+    diningSlider.on('translated.owl.carousel', function(event) {
+      setTimeout(() => {
+        checkActiveDiningDot();
+      }, 100);
+    });
+    
+    // Enhanced manual click handling for dining slider
+    diningSlider.find('.owl-dots').on('click', function(e) {
+  const clickX = e.offsetX || e.originalEvent.layerX || 0;
+  const totalWidth = $(this).width();
+  
+  if (totalWidth > 0) {
+    // Calculate based on 2 sections only (for 2 dots)
+    const sectionWidth = totalWidth / 2; // 2 sections for 2 dots
+    let targetDot = Math.floor(clickX / sectionWidth);
+    targetDot = Math.max(0, Math.min(targetDot, 1)); // Clamp to 0-1
+  
+
+    //Use direct owl dot click instead of to.owl.carousel
+    const owlDots = diningSlider.find('.owl-dots .owl-dot');
+    if (owlDots.eq(targetDot).length) {
+      // Trigger actual dot click for better responsiveness
+      owlDots.eq(targetDot).trigger('click');
+
+    }
+    
+    // Immediately update progress bar
+    updateDiningProgressBar(targetDot);
+  }
+});
     
     diningSlider.on('translated.owl.carousel', function(event) {
       setTimeout(() => {
         isDiningSliding = false;
       }, 30);
     });
+    
+    // Monitor for DOM changes in dining dots
+    const diningObserver = new MutationObserver(function(mutations) {
+      let shouldCheck = false;
+      
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'childList' || 
+            (mutation.type === 'attributes' && mutation.attributeName === 'class')) {
+          shouldCheck = true;
+        }
+      });
+      
+      if (shouldCheck) {
+        setTimeout(() => {
+          checkActiveDiningDot();
+        }, 10);
+      }
+    });
+    
+    // Start observing the dining dots container
+    setTimeout(() => {
+      const dotsContainer = diningSlider.find('.owl-dots')[0];
+      if (dotsContainer) {
+        diningObserver.observe(dotsContainer, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['class']
+        });
+      }
+    }, 500);
+    
+    
   }
-  
-  // ...existing code...
 });
 
 $(document).ready(function() {
   var eventsSlider = $('.events-slider');
-  let isEventsSliding = false;
-  
+  let currentDotIndex = 0;
+  let totalDots = 3;
   if (eventsSlider.length) {
     eventsSlider.owlCarousel({
       loop: true,
@@ -2347,17 +1935,155 @@ $(document).ready(function() {
     });
     
     // Events slider event tracking
-    eventsSlider.on('translate.owl.carousel', function(event) {
-      isEventsSliding = true;
+    function updateEventsProgressBar(dotIndex) {
+      const progressBar = eventsSlider.find('.owl-dots');
+      
+      if (progressBar.length) {
+        // Simple calculation: dot 0 = 0%, dot 1 = 33.333%, dot 2 = 66.666%
+        const positions = [0, 33.333, 66.666];
+        const position = positions[dotIndex] || 0;
+        
+        // Set CSS variable and class
+        progressBar.css('--active-position', position + '%');
+        progressBar[0].style.setProperty('--active-position', position + '%');
+        
+        progressBar.removeClass('position-0 position-1 position-2');
+        progressBar.addClass(`position-${dotIndex}`);
+        
+        currentDotIndex = dotIndex;
+        
+        // Force repaint
+        progressBar[0].offsetHeight;
+      }
+    }
+    
+    // Monitor dots changes with MutationObserver
+    function watchDotsChanges() {
+      const dotsContainer = eventsSlider.find('.owl-dots')[0];
+      
+      if (dotsContainer) {
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              // Check which dot is currently active
+              checkActiveDot();
+            }
+          });
+        });
+        
+        // Observe all dot elements
+        const dots = eventsSlider.find('.owl-dots .owl-dot');
+        dots.each(function(index) {
+          observer.observe(this, {
+            attributes: true,
+            attributeFilter: ['class']
+          });
+        });
+        
+        // Initial check
+        setTimeout(() => {
+          checkActiveDot();
+        }, 100);
+      }
+    }
+    
+    // Function to check which dot is active
+    function checkActiveDot() {
+      const activeDot = eventsSlider.find('.owl-dots .owl-dot.active');
+      
+      if (activeDot.length) {
+        const allDots = eventsSlider.find('.owl-dots .owl-dot');
+        const activeDotIndex = allDots.index(activeDot);
+        
+        if (activeDotIndex !== -1 && activeDotIndex !== currentDotIndex) {
+          updateEventsProgressBar(activeDotIndex);
+        
+        }
+      }
+    }
+    
+    // Initialize
+    eventsSlider.on('initialized.owl.carousel', function(event) {
+  
+      
+      // Start watching dots after initialization
+      setTimeout(() => {
+        watchDotsChanges();
+        updateEventsProgressBar(0); // Set initial position
+      }, 200);
+    });
+    
+    // Backup: Also listen to carousel events
+    eventsSlider.on('changed.owl.carousel', function(event) {
+      // Small delay to ensure dots are updated
+      setTimeout(() => {
+        checkActiveDot();
+      }, 50);
     });
     
     eventsSlider.on('translated.owl.carousel', function(event) {
+      // Another check after animation completes
       setTimeout(() => {
-        isEventsSliding = false;
-      }, 30);
+        checkActiveDot();
+      }, 100);
     });
     
-  }
+    // Enhanced manual click handling - mimic dot clicks
+    eventsSlider.find('.owl-dots').on('click', function(e) {
+      const clickX = e.offsetX || e.originalEvent.layerX || 0;
+      const totalWidth = $(this).width();
+      
+      if (totalWidth > 0) {
+        // Calculate which section was clicked (0, 1, 2)
+        const sectionWidth = totalWidth / 3;
+        let targetDot = Math.floor(clickX / sectionWidth);
+        targetDot = Math.max(0, Math.min(targetDot, 2)); // Clamp to 0-2
+        
+      
+        
+        // Simulate clicking the actual owl dot
+        const owlDots = eventsSlider.find('.owl-dots .owl-dot');
+        if (owlDots.eq(targetDot).length) {
+          eventsSlider.trigger('to.owl.carousel', [targetDot, 1000]);
+        }
+        
+        // Immediately update progress bar for instant feedback
+        updateEventsProgressBar(targetDot);
+      }
+    });
+    
+    // ENHANCED: Monitor for DOM changes in dots
+    const observer = new MutationObserver(function(mutations) {
+      let shouldCheck = false;
+      
+      mutations.forEach(function(mutation) {
+        if (mutation.type === 'childList' || 
+            (mutation.type === 'attributes' && mutation.attributeName === 'class')) {
+          shouldCheck = true;
+        }
+      });
+      
+      if (shouldCheck) {
+        setTimeout(() => {
+          checkActiveDot();
+        }, 10);
+      }
+    });
+    
+    // Start observing the dots container
+    setTimeout(() => {
+      const dotsContainer = eventsSlider.find('.owl-dots')[0];
+      if (dotsContainer) {
+        observer.observe(dotsContainer, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['class']
+        });
+      }
+    }, 500);
+    
+  } 
 });
 
 

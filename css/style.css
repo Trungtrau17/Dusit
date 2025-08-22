@@ -35,7 +35,7 @@ body {
 }
 /* Webkit scrollbar styling */
 ::-webkit-scrollbar {
-  width: clamp(12px, 1.5vw, 17px)!important; /* ✅ Wider scrollbar */
+  width: clamp(12px, 1.5vw, 17px)!important; /* Wider scrollbar */
   background: #f1f1f1;
 }
 
@@ -77,7 +77,7 @@ body {
   --space-xl: clamp(24px, 3vw, 48px);
   --space-2xl: clamp(32px, 4vw, 64px);
   --space-3xl: clamp(40px, 6vw, 80px);
-  /* ✅ Section & Layout Spacing */
+  /* Section & Layout Spacing */
   --section-padding-y: clamp(2rem, 10.1vh, 6rem);
   --section-padding-x: clamp(1rem, 5vw, 5rem);
   --container-padding: clamp(20px, 5vw, 80px);
@@ -95,28 +95,28 @@ body {
   /* Logo sizing */
   --logo-height: clamp(45px, 5vw, 75px);
   --logo-height-mobile: clamp(35px, 8vw, 50px);
-   /* ✅ Button System */
+   /* Button System */
   --btn-padding-y: clamp(8px, 1vw, 15px);
   --btn-padding-x: clamp(16px, 1.6vw, 28px);
   --btn-font-size: clamp(10px, 1vw, 14px);
   --btn-border-radius: clamp(3px, 0.3vw, 6px);
   
-  /* ✅ Navigation & Menu */
+  /* Navigation & Menu */
   --menu-font-size: clamp(10px, 1vw, 14px);
   --menu-spacing: clamp(15px, 2vw, 25px);
   /* --nav-width: clamp(20%, 30vw, 400px); */
   --nav-width: 30%;
-  /* ✅ Content Containers */
+  /* Content Containers */
   --content-max-width: clamp(300px, 63vw, 1000px);
   --card-max-width: clamp(280px, 40vw, 600px);
   --image-max-width: clamp(250px, 60vw, 900px);
   
-  /* ✅ Hero Section */
-  --hero-height: 100vh; /* ✅ Still full screen */
+  /* Hero Section */
+  --hero-height: 100vh; /* Still full screen */
   --hero-min-height: 100vh;
   --hero-title-size: clamp(28px, 3.2vw, 60px);
   
-  /* ✅ Border & Effects */
+  /* Border & Effects */
   --border-radius: clamp(4px, 0.5vw, 8px);
   --box-shadow: 0 clamp(2px, 0.5vw, 5px) clamp(10px, 2vw, 20px) -clamp(2px, 0.5vw, 5px) rgba(0, 0, 0, 0.1);
 }
@@ -294,6 +294,7 @@ h1, h2, h3, h4, h5 {
   cursor: pointer;
   font-weight: 400;
   position: relative;
+  
 }
 .language-switch .lang-item.active {
   font-weight: 600;
@@ -529,12 +530,12 @@ h1, h2, h3, h4, h5 {
   
     transform: translateZ(0);}
   .site-hero.inner-page {
-    height: 100vh; /* ✅ Full screen for inner pages too */
+    height: 100vh; /* Full screen for inner pages too */
     min-height: 100vh;
     /* min-height: var(--hero-min-height); */
    }
     .site-hero.inner-page.overlay:before {
-      height: 100vh; /* ✅ Full screen overlay */
+      height: 100vh; /* Full screen overlay */
       min-height: 100vh;
       /* min-height: 700px; */
       /* min-height: var(--hero-min-height); */
@@ -543,16 +544,16 @@ h1, h2, h3, h4, h5 {
 .site-hero-inner {
   position: relative;
   width: 100%;
-  height: 100vh; /* ✅ Full viewport height */
+  height: 100vh; /* Full viewport height */
   display: flex;
-  align-items: center; /* ✅ Center content vertically */
-  justify-content: flex-start; /* ✅ Align content to left */
+  align-items: center; /* Center content vertically */
+  justify-content: flex-start; /* Align content to left */
   }
   .site-hero-inner .heading {
     position: absolute;
     bottom: 11%;
-    left: clamp(20px, 5vw, 80px); /* ✅ Responsive left margin */
-    right: clamp(20px, 5vw, 80px); /* ✅ Responsive right margin */
+    left: clamp(20px, 5vw, 80px); /* Responsive left margin */
+    right: clamp(20px, 5vw, 80px); /* Responsive right margin */
     font-size: var(--hero-title-size);
     font-family: "Playfair Display", times, serif;
     color: #F4F2EF;
@@ -672,7 +673,7 @@ h1, h2, h3, h4, h5 {
   content: "";
   position: absolute;
   inset: 0;
-  background: url('/images/Background_Embracing.webp') center/cover no-repeat; /* ảnh hoa văn + công chúa */
+  background: url('../images/Background_Embracing.webp') center/cover no-repeat; /* ảnh hoa văn + công chúa */
   opacity: 1; 
   z-index: 1;
 }
@@ -703,7 +704,7 @@ h1, h2, h3, h4, h5 {
   align-items: center;
   width: 100%;
   max-width: var(--content-max-width);
-  margin: 0; /* ✅ Bỏ margin: 0 auto cho trang chủ */
+  margin: 0; /* Bỏ margin: 0 auto cho trang chủ */
 }
 .embracing .scarecrow{
   margin: 0 auto 40px auto;
@@ -939,7 +940,7 @@ h1, h2, h3, h4, h5 {
   margin-bottom: calc(var(--space-2xl) - 5px);
 }
 .slider-section .site-dining{
-  background-image: url('/images/Soi_Artwork_big_crop.webp');
+  background-image: url('../images/Soi_Artwork_big_crop.webp');
   background-size: cover;
   background-position: center;
   width: 100vw;
@@ -1018,46 +1019,80 @@ h1, h2, h3, h4, h5 {
 .dining-slider.owl-carousel .owl-dots {
   position: absolute;
   bottom: clamp(-50px, -7vh, -40px);
-  left: 0;
-  right: 0;
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  margin: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(120px, 20vw, 200px); /* Wider cho 6 slides */
+  height: 4px;
+  background: rgba(200, 200, 200, 0.4);
+  border-radius: 2px;
+  display: block;
+  overflow: hidden;
   padding: 0;
-  pointer-events: auto;
+  margin: 0;
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .dining-slider.owl-carousel .owl-dots .owl-dot {
-  display: inline-block;
-  width: 30px;
-  height: 5px;
-  margin: 0 clamp(6px, 0.8vw, 10px);
-  border-radius: 15px;
-  background-color: rgba(200, 200, 200, 0.4);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  outline: none;
+  display: none;
 }
 
-.dining-slider.owl-carousel .owl-dots .owl-dot.active {
-  background-color: #373635;
-  width: 45px;
-  height: 5px;
-  border-radius: 15px;
+.dining-slider.owl-carousel .owl-dots::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50%; /* 1/6 width for 6 slides */
+  background: linear-gradient(90deg, #373635 0%, #2d2c2b 50%, #373635 100%);
+  border-radius: 2px;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateX(var(--dining-active-position, 0%));
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(55, 54, 53, 0.3);
+  will-change: transform;
 }
 
-.dining-slider.owl-carousel .owl-dots .owl-dot:hover {
-  background-color: #373635;
-  opacity: 0.8;
+/* FALLBACK: CSS classes cho từng position */
+.dining-slider.owl-carousel .owl-dots.dining-position-0::after {
+  transform: translateX(0%);
 }
+
+.dining-slider.owl-carousel .owl-dots.dining-position-1::after {
+  transform: translateX(100%);
+}
+
+.dining-slider.owl-carousel .owl-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%; /* Single separator in the middle */
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 1;
+}
+
+
+/* .dining-slider.owl-carousel .owl-dots:hover {
+  background: rgba(200, 200, 200, 0.5);
+  height: 5px;
+}
+
+.dining-slider.owl-carousel .owl-dots:hover::after {
+  background: linear-gradient(90deg, #2d2c2b 0%, #373635 50%, #2d2c2b 100%);
+  box-shadow: 0 3px 12px rgba(55, 54, 53, 0.4);
+}
+
+.dining-slider.owl-carousel .owl-dots:hover::before {
+  background: rgba(255, 255, 255, 0.4);
+} */
 .dining-items .public-area .img-wrap {
   position: relative;
-  overflow: hidden; 
-  flex-shrink: 0;}
+  overflow: hidden;
+  flex-shrink: 0;
+}
   .dining-items .public-area .img-wrap img {
     -webkit-transition: .3s all ease-in-out;
     -o-transition: .3s all ease-in-out;
@@ -1588,7 +1623,7 @@ h1, h2, h3, h4, h5 {
   position: absolute;
   top: 30%;
   left: 10%;
-  z-index: 3; /* ✅ Cao hơn overlay background */
+  z-index: 3; /* Cao hơn overlay background */
   
   color: #F4F2EF;
   max-width: 40%;
@@ -1663,7 +1698,7 @@ h1, h2, h3, h4, h5 {
     font-family: "Montserrat", sans-serif;
     letter-spacing: 1px;
   
-    padding: var(--space-md) 0; /* ✅ Thêm padding */
+    padding: var(--space-md) 0; /*  Thêm padding */
     margin-bottom: 0;
   }
 
@@ -2244,42 +2279,64 @@ h1, h2, h3, h4, h5 {
 .events-slider.owl-carousel .owl-dots {
   position: absolute;
   bottom: clamp(-40px, -6vh, -30px);
-  left: 0;
-  right: 0;
-  
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  margin: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(120px, 20vw, 200px); /* Chiều rộng thanh sidebar */
+  height: 4px; 
+  background: rgba(200, 200, 200, 0.4); 
+  border-radius: 2px;
+  display: block;
+  overflow: hidden;
   padding: 0;
-  pointer-events: auto;
+  margin: 0;
+  z-index: 10;
+  position: relative;
+  cursor: pointer;
 }
 
 .events-slider.owl-carousel .owl-dots .owl-dot {
-  display: inline-block;
-  width: 30px;
-  height: 5px;
-  margin: 0 clamp(6px, 0.8vw, 10px);
-  border-radius: 15px;
-  background-color: rgba(200, 200, 200, 0.4);
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  outline: none;
+  display: none;
 }
 
-.events-slider.owl-carousel .owl-dots .owl-dot.active {
-  background-color: #373635;
-  width: 45px;
-  height: 5px;
-  border-radius: 15px;
+/* Thanh active di chuyển */
+.events-slider.owl-carousel .owl-dots::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 33.333%; /* 1/3 chiều rộng thanh */
+  background: linear-gradient(90deg, #373635 0%, #555 100%); /* Màu đen gradient */
+  border-radius: 2px;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth transition */
+  transform: translateX(var(--active-position, 0%));
+  z-index: 2;
+  will-change: transform;
 }
 
-.events-slider.owl-carousel .owl-dots .owl-dot:hover {
-  background-color: #373635;
-  opacity: 0.8;
+.events-slider.owl-carousel .owl-dots.position-0::after {
+  transform: translateX(0%);
+}
+
+.events-slider.owl-carousel .owl-dots.position-1::after {
+  transform: translateX(100%); /* Move 1 full width = 33.333% * 3 */
+}
+
+.events-slider.owl-carousel .owl-dots.position-2::after {
+  transform: translateX(200%) ; /* Move 2 full widths */
+}
+
+/* Chia thanh thành 3 đoạn với borders nhẹ */
+.events-slider.owl-carousel .owl-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 33.333%;
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 1;
+  box-shadow: 33.333% 0 0 rgba(255, 255, 255, 0.3); /* Tạo border thứ 2 */
 }
 .events-content .events-item{
   display: flex;
@@ -2404,8 +2461,8 @@ h1, h2, h3, h4, h5 {
     --logo-height: clamp(3.125rem, 12vw, 4.375rem); /* 50px-70px */
     --nav-width: 100vw;
     --container-padding: clamp(15px, 5vw, 30px);
-    --hero-height: 100vh; /* ✅ Always full viewport */
-    --hero-min-height: 100vh; /* ✅ Always full viewport */
+    --hero-height: 100vh; /* Always full viewport */
+    --hero-min-height: 100vh; /* Always full viewport */
     --section-padding-y: clamp(3rem, 8vh, 5rem);
     --container-padding: clamp(1rem, 5vw, 2rem);
     --space-2xl: clamp(2rem, 6vw, 3rem);
@@ -2415,17 +2472,17 @@ h1, h2, h3, h4, h5 {
 
 
   .site-hero {
-    height: clamp(60vh, 80vh, 80vh); /* ✅ Shorter on mobile */
-    background-attachment: scroll; /* ✅ Better mobile performance */
+    height: clamp(60vh, 80vh, 80vh); /* Shorter on mobile */
+    background-attachment: scroll; /* Better mobile performance */
   }
   
   .site-hero-inner .heading {
     position: absolute;
-    bottom: 20%; /* ✅ Higher position */
+    bottom: 20%; /* Higher position */
     left: var(--space-2xl);
     right: var(--space-2xl);
-    text-align: center; /* ✅ Center text */
-    font-size: clamp(1.75rem, 6vw, 2.5rem); /* ✅ Rem-based */
+    text-align: center; /* Center text */
+    font-size: clamp(1.75rem, 6vw, 2.5rem); /* Rem-based */
     line-height: 1.2;
   }
   .site-header {
@@ -2434,7 +2491,7 @@ h1, h2, h3, h4, h5 {
   
   
   .site-header .site-logo a {
-    height: calc(var(--logo-height) + 0.125rem); /* ✅ Container cũng tăng theo */
+    height: calc(var(--logo-height) + 0.125rem); /* Container cũng tăng theo */
   }
   
   .header-right {
@@ -2453,12 +2510,12 @@ h1, h2, h3, h4, h5 {
   
 
   .site-navbar .close {
-    top: clamp(var(--header-padding-y), 3vh, calc(var(--header-padding-y) + 5px)); /* ✅ Match header top padding */
+    top: clamp(var(--header-padding-y), 3vh, calc(var(--header-padding-y) + 5px)); /* Match header top padding */
     left: calc(
       var(--space-sm) + var(--space-md) + var(--space-sm) + 38px   
     );
     letter-spacing: clamp(1.5px, 0.2vw, 2.5px); 
-    padding: var(--space-sm) 0; /* ✅ Same padding as menu text */
+    padding: var(--space-sm) 0; /* Same padding as menu text */
   }
 
   .site-menu-toggle {
@@ -2474,16 +2531,16 @@ h1, h2, h3, h4, h5 {
   }
   .site-navbar nav .menu {
     padding: var(--space-lg);
-    text-align: center; /* ✅ Center alignment như Ultima */
+    text-align: center; /* Center alignment như Ultima */
   }
   
   .site-navbar nav .menu li {
-    margin-bottom: var(--space-lg); /* ✅ Larger touch targets */
+    margin-bottom: var(--space-lg); /* Larger touch targets */
   }
   
   .site-navbar nav .menu li a {
-    font-size: clamp(1.125rem, 4vw, 1.5rem); /* ✅ Larger text */
-    padding: var(--space-lg) 0; /* ✅ Touch-friendly */
+    font-size: clamp(1.125rem, 4vw, 1.5rem); /* Larger text */
+    padding: var(--space-lg) 0; /* Touch-friendly */
     display: block;
     width: 100%;
   }
@@ -2495,7 +2552,7 @@ h1, h2, h3, h4, h5 {
       rgba(0, 0, 0, 0.7) 50%,
       rgba(0, 0, 0, 0.4) 80%,
       transparent 100%
-    ); /* ✅ Stronger gradient for mobile readability */
+    ); /* Stronger gradient for mobile readability */
   }
   
   .overlay-text h3 {
@@ -2566,7 +2623,7 @@ h1, h2, h3, h4, h5 {
   .events-content .events-item-2 {
     display: flex ;
     flex-direction: column ;
-    align-items: center; /* ✅ Center alignment */
+    align-items: center; /* Center alignment */
     gap: var(--space-2xl) ;
     padding: 0 var(--space-md);
   }
@@ -2610,13 +2667,13 @@ h1, h2, h3, h4, h5 {
   }
   
   .ev .ev-img img {
-    height: clamp(250px, 50vh, 350px); /* ✅ Even shorter on small screens */
+    height: clamp(250px, 50vh, 350px); /* Even shorter on small screens */
   }
   
   .ev .ev-img .overlay-text {
-    max-width: 80%; /* ✅ Almost full width */
+    max-width: 80%; /* Almost full width */
     width: 80%;
-    padding: var(--space-md); /* ✅ Even smaller padding */
+    padding: var(--space-md); /* Even smaller padding */
   }
   
   .ev .ev-img .overlay-text h3 {
@@ -2635,7 +2692,7 @@ h1, h2, h3, h4, h5 {
     font-size: clamp(0.7rem, 3.5vw, 0.8rem);
     padding: var(--space-xs) var(--space-sm);
   }
-  /* ✅ WELLNESS PAGE RESPONSIVE */
+  /* WELLNESS PAGE RESPONSIVE */
   .wellness-content .wellness-item {
     flex-direction: column;
     gap: var(--space-2xl);
@@ -2659,7 +2716,7 @@ h1, h2, h3, h4, h5 {
   .wellness-content .wellness-item:nth-child(3) .wellness-image {
     order: 1;
   }
-  /* ✅ DINING PAGE RESPONSIVE */
+  /* DINING PAGE RESPONSIVE */
   .dining-service .res-list {
     flex-direction: column;
     gap: var(--space-3xl);
@@ -2670,7 +2727,7 @@ h1, h2, h3, h4, h5 {
     max-width: 100%;
     width: 100%;
   }
-  /* ✅ ROOM DETAIL PAGES RESPONSIVE */
+  /* ROOM DETAIL PAGES RESPONSIVE */
   .images-list .double-image {
     flex-direction: column;
     gap: var(--space-lg);
@@ -2685,7 +2742,7 @@ h1, h2, h3, h4, h5 {
     max-width: 100%;
     width: 100%;
   }
-   /* ✅ ACCOMMODATION SLIDER NAVIGATION */
+   /* ACCOMMODATION SLIDER NAVIGATION */
   .accommodation .slider-nav,
   .section-2 .slider-nav {
     display: none;
@@ -2702,12 +2759,12 @@ h1, h2, h3, h4, h5 {
     gap: clamp(20px, 5.5vw, 100px);
   }
   .room-item .room-btn {
-    position: static; /* ✅ Not absolute positioned */
+    position: static; /* Not absolute positioned */
     margin-top: var(--space-lg);
     align-self: center;
   }
 
- /* ✅ DINING HERO BACKGROUND */
+ /* DINING HERO BACKGROUND */
   .slider-section .site-dining {
     min-height: clamp(18.75rem, 50vh, 25rem);
   }
@@ -2719,7 +2776,7 @@ h1, h2, h3, h4, h5 {
     font-size: clamp(1.25rem, 4vw, 1.75rem);
     text-align: center;
   }
-  /* ✅ WELLNESS & EVENTS SLIDER */
+  /* WELLNESS & EVENTS SLIDER */
   .section-2 .we-items .item {
     display: flex;
     align-items: center;
@@ -2735,7 +2792,7 @@ h1, h2, h3, h4, h5 {
     justify-content: center;
     overflow: hidden;
     cursor: pointer;
-    width: 100% !important; /* ✅ Full width instead of 80% */
+    width: 100% !important; /* Full width instead of 80% */
     max-width: 100% !important;
     margin: 0 auto !important; 
   }
@@ -2745,7 +2802,7 @@ h1, h2, h3, h4, h5 {
     max-width: 100%;
   }
   
-/* ✅ CONTACT PAGE MAP */
+/* CONTACT PAGE MAP */
   .map-container {
     flex-direction: column;
     gap: var(--space-2xl);
@@ -2786,7 +2843,7 @@ h1, h2, h3, h4, h5 {
   
   
   
-  /* ✅ FOOTER RESPONSIVE */
+  /* FOOTER RESPONSIVE */
   .footer-section .footer-content {
     flex-direction: column;
     gap: var(--space-3xl);
@@ -2802,11 +2859,11 @@ h1, h2, h3, h4, h5 {
   }
   
   .footer-section .footer-logo img {
-    width: clamp(9.375rem, 25vw, 12.5rem); /* ✅ Rem-based */
+    width: clamp(9.375rem, 25vw, 12.5rem); /* Rem-based */
   }
-  /* ✅ BUTTONS TOUCH-FRIENDLY */
+  /* BUTTONS TOUCH-FRIENDLY */
 
-  /* ✅ BREADCRUMB RESPONSIVE */
+  /* BREADCRUMB RESPONSIVE */
   .breadcrumb-section .container {
     width: 95vw;
     padding: 0 var(--space-md);
@@ -2838,21 +2895,21 @@ h1, h2, h3, h4, h5 {
     display: none;
   }
   .site-navbar nav .menu {
-    margin-top: clamp(60px, 15vh, 100px); /* ✅ Reduce top margin */
-    margin-bottom: var(--space-xl); /* ✅ Add bottom margin */
+    margin-top: clamp(60px, 15vh, 100px); /* Reduce top margin */
+    margin-bottom: var(--space-xl); /* Add bottom margin */
   }
   
   .site-navbar nav .menu li {
-    margin-bottom: var(--space-md); /* ✅ Reduce spacing between items */
+    margin-bottom: var(--space-md); /* Reduce spacing between items */
   }
   
-  /* ✅ Adjust menu item font size to fit more content */
+  /* Adjust menu item font size to fit more content */
   .site-navbar nav .menu li a {
-    font-size: clamp(1rem, 4.5vw, 1.5rem); /* ✅ Slightly smaller */
-    padding: var(--space-sm) 0; /* ✅ Reduce padding */
+    font-size: clamp(1rem, 4.5vw, 1.5rem); /* Slightly smaller */
+    padding: var(--space-sm) 0; /* Reduce padding */
   }
   .menu-language-switch {
-    display: block; /* ✅ Show menu language switch */
+    display: block; /* Show menu language switch */
   }
 
 
@@ -2865,7 +2922,7 @@ h1, h2, h3, h4, h5 {
     font-size: clamp(1.5rem, 5vw, 2rem);
     bottom: 15%;
   }
-  /* ✅ CENTERED HERO SMALL MOBILE */
+  /* CENTERED HERO SMALL MOBILE */
   body.about-page .site-hero-inner .heading,
   body.wellness-page .site-hero-inner .heading,
   body.events-page .site-hero-inner .heading,
@@ -2875,10 +2932,10 @@ h1, h2, h3, h4, h5 {
      font-size: clamp(1.5rem, 6vw, 2rem) !important;
   }
   .site-navbar nav .menu li a {
-    font-size: clamp(1.25rem, 5vw, 1.75rem); /* ✅ Even larger on small screens */
+    font-size: clamp(1.25rem, 5vw, 1.75rem); /* Even larger on small screens */
     padding: var(--space-lg) 0;
   }
-/* ✅ SECTION HEADINGS SMALLER */
+/* SECTION HEADINGS SMALLER */
   .section .accommodation .heading,
   .slider-section .dining-text h2,
   .section-2 .title h2
@@ -2893,7 +2950,7 @@ h1, h2, h3, h4, h5 {
     margin-right: var(--space-lg);
     font-size: var(--font-size-sm);
   }
-  /* ✅ CONTENT PADDING SMALLER */
+  /* CONTENT PADDING SMALLER */
   .dining-items,
   .about-content .about-item,
   .about-content .about-item-2,
@@ -2901,7 +2958,7 @@ h1, h2, h3, h4, h5 {
   .wellness-content .wellness-item {
     padding: 0 var(--space-md);
   }
-  /* ✅ EMBRACING CONTENT SMALLER */
+  /* EMBRACING CONTENT SMALLER */
   .embracing .scarecrow img {
     max-width: clamp(9.375rem, 40vw, 12.5rem);
   }
@@ -2911,7 +2968,7 @@ h1, h2, h3, h4, h5 {
     font-size: clamp(0.875rem, 3vw, 1rem);
   }
   
-  /* ✅ CONTACT MAP SMALLER */
+  /* CONTACT MAP SMALLER */
   .map-container iframe {
     height: clamp(15rem, 40vw, 18.75rem);
   }
@@ -2919,14 +2976,14 @@ h1, h2, h3, h4, h5 {
 }
 @media (min-width: 769px) and (max-width: 1024px) {
   
-  /* ✅ TABLET VARIABLES */
+  /* TABLET VARIABLES */
   :root {
     --nav-width: 40%;
     --container-padding: clamp(2rem, 6vw, 4rem);
     --space-2xl: clamp(2.5rem, 5vw, 3.5rem);
   }
 
-  /* ✅ HERO TITLE SIZING */
+  /* HERO TITLE SIZING */
   .site-hero-inner .heading {
     font-size: clamp(2rem, 5vw, 3rem);
   } 
@@ -2944,7 +3001,7 @@ h1, h2, h3, h4, h5 {
     letter-spacing: clamp(1.5px, 0.3vw, 2.5px);
     z-index: 201;
   }
-  /* ✅ CONTENT TWO-COLUMN LAYOUT */
+  /* CONTENT TWO-COLUMN LAYOUT */
   .about-content .about-item,
   .about-content .about-item-2,
   .events-content .events-item,
@@ -2953,14 +3010,14 @@ h1, h2, h3, h4, h5 {
     gap: var(--space-3xl);
   }
 
-  /* ✅ DINING GRID 2 COLUMNS */
+  /* DINING GRID 2 COLUMNS */
   .dining-service .res-list {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-sm);
   }
 
-  /* ✅ ROOM IMAGES GRID */
+  /* ROOM IMAGES GRID */
   .images-list .double-image {
     flex-direction: row;
     gap: var(--space-lg);
@@ -2971,29 +3028,29 @@ h1, h2, h3, h4, h5 {
     gap: var(--space-md);
   }
   .image-container .overlay-content {
-    max-height: clamp(300px, 70vh, 400px) !important; /* ✅ Always expanded */
-    opacity: 1 !important; /* ✅ Always visible */
-    transition: none !important; /* ✅ No animation needed */
+    max-height: clamp(300px, 70vh, 400px) !important; /* Always expanded */
+    opacity: 1 !important; /* Always visible */
+    transition: none !important; /* No animation needed */
   }
   
   .image-container .overlay-text {
-    transform: translateY(0) !important; /* ✅ Always in position */
-    transition: none !important; /* ✅ No animation */
+    transform: translateY(0) !important; /* Always in position */
+    transition: none !important; /* No animation */
   }
   
-  /* ✅ Remove hover effects on mobile/tablet */
+  /* Remove hover effects on mobile/tablet */
   .image-container:hover .overlay-content {
-    max-height: clamp(300px, 70vh, 400px); /* ✅ Same as default */
+    max-height: clamp(300px, 70vh, 400px); /* Same as default */
     opacity: 1;
   }
   
   .image-container:hover .overlay-text {
-    transform: translateY(0); /* ✅ Same as default */
+    transform: translateY(0); /* Same as default */
   }
   
-  /* ✅ Optional: Still keep image zoom on touch */
+  /* Optional: Still keep image zoom on touch */
   .image-container:active img {
-    transform: scale(1.02); /* ✅ Zoom on touch/tap */
+    transform: scale(1.02); /* Zoom on touch/tap */
   }
   .image-container .overlay-content {
     padding: clamp(30px, 8vh, 80px) var(--space-lg) var(--space-lg);
@@ -3042,7 +3099,7 @@ h1, h2, h3, h4, h5 {
     transform: translateY(0) !important;
   }
   
-  /* ✅ Specific mobile animations */
+  /* Specific mobile animations */
   [data-aos="fade-up"] {
     transform: translateY(30px);
   }
@@ -3158,7 +3215,7 @@ h1, h2, h3, h4, h5 {
     touch-action: none !important;
   }
   
-  /* ✅ Allow menu content to scroll */
+  /* Allow menu content to scroll */
   .menu-open .site-navbar {
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
@@ -3295,7 +3352,7 @@ h1, h2, h3, h4, h5 {
     touch-action: pan-y !important; 
   }
 }
-/* ✅ Small mobile specific */
+/* Small mobile specific */
 @media (max-width: 480px) {
   .site-hero {
     width: 100vw;
@@ -3313,7 +3370,7 @@ h1, h2, h3, h4, h5 {
     bottom: 15%;
   }
   .language-switch {
-    display: none ; /* ✅ Hide language switch completely */
+    display: none ; /* Hide language switch completely */
   }
   
   .book-btn {
@@ -3321,17 +3378,17 @@ h1, h2, h3, h4, h5 {
     padding: var(--space-xs) var(--space-sm) !important;
   }
 }
-/* ✅ Large screens optimization */
+/* Large screens optimization */
 @media (min-width: 1920px) {
   :root {
     --container-max-width: min(100% - 160px, 2000px);
     --section-padding-y: clamp(6rem, 10vh, 12rem);
     --hero-height: 100vh; 
-    --hero-min-height: 100vh; /* ✅ Still full screen */
+    --hero-min-height: 100vh; /* Still full screen */
   }
 }
 
-/* ✅ Ultra-wide screens */
+/* Ultra-wide screens */
 @media (min-width: 2560px) {
   :root {
     --container-max-width: min(100% - 200px, 2400px);

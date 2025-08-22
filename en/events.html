@@ -12,22 +12,21 @@
     <meta name="keywords" content="" />
     <meta name="author" content="" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/animate.css">
-    <link rel="stylesheet" href="css/owl.carousel.min.css">
-    <link rel="stylesheet" href="css/bootstrap-datepicker.css">
-    <link rel="stylesheet" href="css/jquery.timepicker.css">
-    <link rel="stylesheet" href="css/fancybox.min.css">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/animate.css">
+    <link rel="stylesheet" href="../css/owl.carousel.min.css">
+    <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="../css/jquery.timepicker.css">
+    <link rel="stylesheet" href="../css/fancybox.min.css">
+    <link rel="stylesheet" href="../fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.8/dist/lenis.css">
-    <link rel="stylesheet" href="fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <!-- Theme Style -->
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
   </head>
+
   <body>
-    
     <div class="lenis">
       <header class="site-header js-site-header" data-aos="fade-down">
         <div class="container-fluid" >
@@ -41,10 +40,13 @@
                   <span class="menu-text">MENU</span>
                 </button>
                 <!-- END menu-toggle -->
+
                 <div class="site-navbar js-site-navbar">
                   <span class="close">CLOSE</span>
                   <nav role="navigation">
+                    
                     <div class="container">
+                      
                       <div>
                         <ul class="list-unstyled menu">
                           <li><a href="about.html">ABOUT</a></li>
@@ -56,10 +58,10 @@
                           <li class="menu-language-switch">
                             <div class="menu-lang-options">
                               <span class="menu-lang-item active" data-lang="en">English</span>
-                              <span class="menu-lang-item" data-lang="vn">Tiếng Việt</span>
+                              <span class="menu-lang-item" data-lang="vn" onclick="window.location.href = '../vn/events.html'">Vietnamese</span>
                             </div>
                           </li>
-                        </ul>     
+                        </ul>    
                       </div>   
                     </div>
                   </nav>
@@ -69,8 +71,8 @@
               
               <div class="header-mid site-logo" >
                 <a href="index.html">
-                  <img src="images/DUSIT_Le_Palais_Tu_Hoa_Hanoi_Logo_White.webp" alt="Logo White" class="logo-white">
-                  <img src="images/DUSIT_Le_Palais_Tu_Hoa_Hanoi_Logo_Black.webp" alt="Logo Black" class="logo-black">
+                  <img src="../images/DUSIT_Le_Palais_Tu_Hoa_Hanoi_Logo_White.webp" alt="Logo White" class="logo-white">
+                  <img src="../images/DUSIT_Le_Palais_Tu_Hoa_Hanoi_Logo_Black.webp" alt="Logo Black" class="logo-black">
                 </a>
               </div>
               
@@ -78,70 +80,68 @@
                 <div class="language-switch">
                 <span class="lang-item active" data-lang="en">EN</span> 
                 <span class="separator">|</span> 
-                <span class="lang-item" data-lang="vn">VN</span>
+                <span class="lang-item" data-lang="vn" onclick="window.location.href = '../vn/events.html'">VN</span>
               </div>
                 <a href="https://www.dusit.com/sign-in/" class="book-btn">BOOK NOW</a>
               </div>
         </div>
       </header>
-    <!-- END head -->
+      <!-- END head -->
       <div class="menu-overlay"></div>
-      <section class="site-hero overlay">
-        <div class="container">
-          <div class="row site-hero-inner justify-content-center align-items-center" data-aos="fade-up">
-            <h4 class="heading">Wellness at Dusit<br>Le Palais Tu Hoa Ha Noi</h4>
-          </div>
-        </div>
-      </section>
 
       <section class="embracing py-5 bg-light">
         <div class="container">
-            <div class="dining text-center ">
+            <div class="collection text-center ">
               <!-- col-lg-8 -->
-              <h3 class="heading" data-aos="fade-up">Our Wellness Essence</h3>
+              <h3 class="heading" data-aos="fade-up">Events</h3>
               <div data-aos="fade-up" data-aos-delay="200">
-                <p class="embracing-content">At Dusit Le Palais Tu Hoa Hanoi, our wellness offerings are designed to nurture your body and soul, blending traditional relaxation with modern rejuvenation.</p> 
+                <p class="embracing-content" >Elevate your gatherings with our exquisite venues.</p> 
               </div>
-              
             </div>
         </div>
-      </section >
-      <section class="wellness-content">
-        <div class="wellness-item" data-aos="fade-in">
-          <div class="wellness-text">
-            <h3 class="wellness-title">Fitness Centre</h3>
-            <p class="description">Stay on top of your fitness routine with our fitness centre, which is open 24 hours daily for your convenience. Whether you prefer an energising morning workout or a late-night session, our modern space ensures a seamless experience.</p>
-          </div>
-          <div class="wellness-image">
-            <img src="images/Fitness_Centre_resize.webp" alt="GYM">
-          </div>
-        </div>
-
-        <div class="wellness-item" data-aos="fade-in">
-            <div class="wellness-image">
-              <img src="images/swimming-pool-backup.webp" alt="Swimming Pool">
-            </div>
-          <div class="wellness-text">
-            <h3 class="wellness-title">Outdoor Swimming Pool (Coming Soon)</h3>
-            <p class="description">Unwind in our stunning outdoor pool, a serene retreat with breathtaking panoramic views. Whether it’s a refreshing morning swim, a leisurely dip, or lounging poolside with a cool drink, relaxation awaits.</p>
-          </div>
-          
-        </div>
-        <div class="wellness-item" data-aos="fade-in">
-          <div class="wellness-text">
-            <h3 class="wellness-title">Onsen</h3>
-            <p class="description">Indulge in an authentic Onsen experience with soothing hot springs, luxurious bath amenities, and a tranquil garden view.</p>
-          </div>
-          <div class="wellness-image">
-            <img src="images/Onsen.webp" alt="GYM">
-          </div>
+        <div class="collection-image" data-aos="fade-up" data-aos-delay="600" data-aos-offset="250" >
+          <img src="../images/Lobby.webp" alt="Lobby">
         </div>
       </section>
 
-    
-
-
-    
+      <section class="events-content" data-aos="fade-in">
+        <div class="events-item">
+          <div class="events-text">
+            <h3 class="events-title">Gallery Lounge</h3>
+            <p class="description">An elegant central lounge adorned with curated artworks, surrounded by meeting rooms and the grand ballroom. Perfect for networking, pre-event gatherings, or relaxing between sessions.</p>
+          </div>
+          <div class="events-image events-slider owl-carousel">
+            <div class="events-slide">
+              <img src="../images/Gallery_Lounge.webp" alt="Gallery_Lounge">
+            </div>
+            <div class="events-slide">
+              <img src="../images/Gallery_Lounge(1).webp" alt="Gallery_Lounge">
+            </div>
+            <div class="events-slide">
+              <img src="../images/Gallery_Lounge_2.webp" alt="Gallery_Lounge">
+            </div>
+          </div>
+        </div>
+        <div class="events-item">
+          <div class="events-image">
+            <img src="../images/Tu_Hoa_Ballroom_resize.webp" alt="Tu_Hoa_Ballroom">
+          </div>
+          <div class="events-text">
+            <h3 class="events-title">Ballroom</h3>
+            <p class="description">Three spacious, elegantly designed ballrooms with state-of-the-art AV technology, accommodating up to 180 guests. Ideal for conferences, banquets, and grand celebrations.</p>
+          </div>
+        </div>
+        <div class="events-item-2">
+          <div class="events-text">
+            <h3 class="events-title">Meeting</h3>
+            <p class="description">Two versatile rooms, perfect for small corporate meetings, workshops, and similar events.</p>
+          </div>
+          <div class="events-image">
+            <img src="../images/Lac_Long_Quan_Meeting_Room.webp" alt="Lac_Long_Quan_Meeting_Room">
+            <img src="../images/Hung_Vuong_Meeting_Room.webp" alt="Hung_Vuong_Meeting_Room">
+          </div>
+        </div>
+      </section>
     
     <section class="breadcrumb-section" data-aos="fade-in">
         <div class="container">
@@ -149,13 +149,13 @@
             <ul class="custom-breadcrumbs">
               <li><a href="index.html">Home</a></li>
               <li><span class="separator">/</span></li>
-              <li><span class="current">Wellness</span></li>
+              <li><span class="current">Events</span></li>
             </ul>
           </nav>
         </div>
       </section>
-
-      <section class="section bg-image overlay" style="background-image: url('images/Gallery_Lounge.webp');" data-aos="fade-in">
+    
+    <section class="section bg-image overlay" style="background-image: url('../images/Gallery_Lounge.webp');" data-aos="fade-in">
         <div class="container" >
           <div class="row align-items-center">
             <div class="col-12 col-md-6 text-center mb-4 mb-md-0 text-md-left">
@@ -171,15 +171,15 @@
     <footer class="footer-section">
       <div class="container">
         <div class="footer-logo">
-          <img src="images/DUSIT_Le_Palais_Tu_Hoa_Hanoi_Logo_White.webp" alt="Logo">
+          <img src="../images/DUSIT_Le_Palais_Tu_Hoa_Hanoi_Logo_White.webp" alt="Logo">
         </div>
         <div class="footer-content">
           <div class="Explore">
             <span class="title">Explore</span>
             <ul class="list-unstyled link">
-              <li><a href="/about.html">Our Collection</a></li>
-              <li><a href="/dining.html">Dining Experiences</a></li>
-              <li><a href="/contact.html">Contact</a></li>
+              <li><a href="about.html">Our Collection</a></li>
+              <li><a href="dining.html">Dining Experiences</a></li>
+              <li><a href="contact.html">Contact</a></li>
             </ul>
           </div>
           <div class="follow-us">
@@ -219,61 +219,88 @@
       </div>
     </footer>
       
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/jquery-migrate-3.0.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/jquery.fancybox.min.js"></script>
-
-
-    <script src="js/bootstrap-datepicker.js"></script> 
-    <script src="js/jquery.timepicker.min.js"></script> 
+    <script src="../js/jquery-3.3.1.min.js"></script>
+    <script src="../js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="../js/popper.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/owl.carousel.min.js"></script>
+    <script src="../js/jquery.fancybox.min.js"></script>
+    <script src="../js/bootstrap-datepicker.js"></script> 
+    <script src="../js/jquery.timepicker.min.js"></script> 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://unpkg.com/lenis@1.3.7/dist/lenis.min.js"></script>
-     
-    <script src="js/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+    <script src="../js/main.js"></script>
     </div>
     <style>
-      body.about-page .site-hero {
-        background-image: url('images/Gallery_Lounge(1).webp') !important; 
-      }
-      body.about-page .site-hero-inner {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        text-align: center !important;
-      }
+/* CSS cho rooms page - Header luôn dạng scrolled */
+body.rooms-page .site-header {
+  background: #F8F5F0 !important;
+  box-shadow: 0 5px 20px -5px rgba(0, 0, 0, 0.1) !important;
+}
 
-      body.about-page .site-hero-inner .heading {
-        position: static !important; /* Bỏ absolute positioning */
-        bottom: auto !important;
-        left: auto !important;
-        transform: none !important;
-        margin: 0 !important;
-        font-size: 48px !important; /* Tăng size vì ở giữa */
-        text-align: center !important;
-        line-height: 1.5 !important; /* Giảm line-height để chữ gần nhau hơn */
-      }
-      
-      /* ✅ Responsive cho heading centered */
-      @media (max-width: 768px) {
-        body.about-page .site-hero-inner .heading {
-          font-size: 32px !important;
-        }
-      }
+body.rooms-page .site-header .site-menu-toggle .menu-icon span {
+  background: #373635 !important;
+}
 
-      @media (max-width: 480px) {
-        body.about-page .site-hero-inner .heading {
-          font-size: 28px !important;
-        }
-      }
-    </style>
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
+body.rooms-page .site-header .site-logo .logo-white {
+  opacity: 0 !important;
+}
 
-        document.body.classList.add('about-page');
-    });
-  </script>
+body.rooms-page .site-header .site-logo .logo-black {
+  opacity: 1 !important;
+}
+
+body.rooms-page .site-header .language-switch {
+  color: #373635 !important;
+}
+
+body.rooms-page .site-header .book-btn {
+  background-color: #373635 !important;
+  color: #F4F2EF !important;
+  border: 0.7px solid #373635 !important;
+}
+
+body.rooms-page .site-header .menu-text {
+  color: #373635 !important;
+}
+
+/* Header hover vẫn hoạt động như bình thường */
+body.rooms-page .site-header:hover {
+  background-color: #F4F2EF !important;
+  border: none !important;
+}
+</style>
+
+<script>
+// THÊM JavaScript cho rooms page
+document.addEventListener('DOMContentLoaded', function() {
+  // Thêm class cho body để identify rooms page
+  document.body.classList.add('rooms-page');
+  
+  // Giữ nguyên logic hide/show header theo scroll
+  let lastScrollTop = 0;
+  const header = document.querySelector('.site-header');
+  
+  window.addEventListener('scroll', function() {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    // Hide/show header logic (giữ nguyên từ main.js)
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+      // Scrolling down
+      header.classList.add('header-hidden');
+    } else {
+      // Scrolling up
+      header.classList.remove('header-hidden');
+    }
+    
+    lastScrollTop = scrollTop;
+  }, false);
+  
+  // Đảm bảo header luôn có class 'scrolled' trên rooms page
+  header.classList.add('scrolled');
+});
+</script>
+
   </body>
 </html>
