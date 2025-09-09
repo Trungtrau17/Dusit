@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: main   # nhánh chính của repo (thường là main)
+
+media_folder: "assets/uploads"    # nơi lưu ảnh trong repo
+public_folder: "/assets/uploads"  # đường dẫn ảnh public
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - file: "index.html"
+        label: "Trang chủ"
+        name: "home"
+        fields:
+          - { label: "Tiêu đề", name: "title", widget: "string" }
+          - { label: "Nội dung", name: "body", widget: "text" }
