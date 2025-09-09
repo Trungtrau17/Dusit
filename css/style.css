@@ -32,6 +32,7 @@ body {
 .lenis {
   width: 100%;
   min-height: 100vh;
+ /* overflow-y: visible; */
 }
 /* Webkit scrollbar styling */
 ::-webkit-scrollbar {
@@ -501,24 +502,27 @@ h1, h2, h3, h4, h5 {
   width: 100vw;
 }
 .site-hero {
-  background-image: url(../images/Hotel_Building_crop_2.webp);
+  position: relative;
+  max-height: 100vh;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* Đảm bảo không tràn */
+  background: none;
+}
+
+/* Ảnh nền background (hiển thị ban đầu) */
+.hero-bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../images/Hotel_Building_crop_2.webp'); /* Ảnh nền ban đầu */
+  background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed; 
-
-  max-height: 100vh;
-  height: 100vh; 
-  width: 100%;
-  position: relative;
-  background-attachment: scroll;
-  /* Preload và optimize */
-  will-change: auto;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  
 }
-  .site-hero.overlay:before {
+  .site-hero .overlay:before {
     background: rgba(0, 0, 0, 0.45);
     content: "";
     position: absolute;
@@ -527,7 +531,7 @@ h1, h2, h3, h4, h5 {
     left: 0;
     bottom: 0;
     right: 0; 
-  
+    z-index: 5;
     transform: translateZ(0);}
   .site-hero.inner-page {
     height: 100vh; /* Full screen for inner pages too */
@@ -540,7 +544,14 @@ h1, h2, h3, h4, h5 {
       /* min-height: 700px; */
       /* min-height: var(--hero-min-height); */
     }
-
+.site-hero video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .site-hero-inner {
   position: relative;
   width: 100%;
@@ -548,7 +559,115 @@ h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center; /* Center content vertically */
   justify-content: flex-start; /* Align content to left */
-  }
+  z-index: 5;
+}
+.hero-slider.owl-carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-slider.owl-carousel .owl-stage {
+  display: flex;
+  align-items: stretch;
+  transform: translate3d(0px, 0px, 0px);
+  will-change: transform;
+  width: auto;
+  position: relative;
+  height: 100vh;
+}
+
+.hero-slider.owl-carousel .owl-stage-outer {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.hero-slider.owl-carousel .owl-item {
+  opacity: 1;
+  transform: none;
+  transition: none;
+  display: flex;
+  align-items: stretch;
+  height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  flex-shrink: 0;
+}
+.hero-slide {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100vh;
+  flex-shrink: 0;
+}
+.hero-slider.owl-carousel .owl-dots {
+  position: absolute;
+  bottom: clamp(40px, 6vh, 80px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(100px, 15vw, 150px);
+  height: 4px;
+  background: rgba(200, 200, 200, 0.4);
+  border-radius: 2px;
+  display: block;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  z-index: 100 ;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+}
+
+.hero-slider.owl-carousel .owl-dots .owl-dot {
+  display: none;
+}
+
+/* Hero active progress bar */
+.hero-slider.owl-carousel .owl-dots::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50%; /* 1/2 cho 2 slides */
+  background: linear-gradient(90deg, #F4F2EF 0%, #fff 100%);
+  border-radius: 2px;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateX(var(--hero-active-position, 0%));
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(244, 242, 239, 0.5);
+  will-change: transform;
+}
+
+/* Separator cho 2 sections */
+.hero-slider.owl-carousel .owl-dots::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  z-index: 1;
+}
+
+/* Position classes cho hero */
+.hero-slider.owl-carousel .owl-dots.hero-position-0::after {
+  transform: translateX(0%);
+}
+
+.hero-slider.owl-carousel .owl-dots.hero-position-1::after {
+  transform: translateX(100%);
+}
   .site-hero-inner .heading {
     position: absolute;
     bottom: 11%;
@@ -1670,8 +1789,10 @@ h1, h2, h3, h4, h5 {
     }
   .footer-section .footer-content{
     display: flex;
-    justify-content: space-between;
-    margin-top: calc(var(--space-xl) - 8px);
+    justify-content: flex-start;
+    margin-top: calc(var(--space-xl) - 8px);  
+    gap: clamp(150px, 16vw, 250px)
+    
   }
   .footer-section a {
     color: #F4F2EF;
@@ -2430,6 +2551,7 @@ h1, h2, h3, h4, h5 {
   max-width: clamp(220px, 22.4vw, 350px);
   height: auto;
 }
+
 
 
 
@@ -3980,7 +4102,10 @@ h1, h2, h3, h4, h5 {
     opacity: 0.8;
   }
 
-
+  /* .menu-open .lenis {
+    overflow: visible !important;
+  
+  } */
   .we-slider.owl-carousel .owl-dots .owl-dot.active {
     background-color: #373635;
     transform: scale(1.2);
@@ -3990,6 +4115,7 @@ h1, h2, h3, h4, h5 {
     background-color: #373635;
     opacity: 0.8;
   }
+  
   .accommodation-slider .owl-item,
   .we-slider .owl-item,
   .dining-slider .owl-item,

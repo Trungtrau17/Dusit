@@ -16,10 +16,8 @@
   let rafId = null;
 
   $(document).ready(function() {
-    
     function handleOverlayVisibility() {
     const isMobileOrTablet = $(window).width() <= 1024;
-    
     if (isMobileOrTablet) {
       // Force show overlay on mobile/tablet
       $('.image-container .overlay-content').css({
@@ -77,7 +75,233 @@ function updateMenuOverlay() {
     overlay.style.top = `${headerHeight}px`;
   }
 }
+$(document).ready(function() {
+  // Hero Slider với cấu trúc giống events slider
+  var heroSlider = $('.hero-slider');
+  let currentHeroDotIndex = 0;
+  let videoHasPlayed = false;
+  if (heroSlider.length) {
+    heroSlider.owlCarousel({
+      loop: false,
+      autoplay: false,
+      margin: 0,
+      nav: false,
+      dots: true,
+      items: 1,
+      stagePadding: 0,
+      smartSpeed: 1500,
+      slideBy: 1,
+      center: false,
+      animateOut: 'fadeOut',
+      animateIn: 'fadeIn',
+      touchDrag: true,
+      mouseDrag: true,
+      pullDrag: true,
+      freeDrag: false,
+      touchTreshold: 100,
+      dotsSpeed: 600,
+      dragEndSpeed: 600,
+      responsive: {
+        0: {
+          items: 1,
+          margin: 0,
+          touchDrag: true,
+          mouseDrag: false,
+          pullDrag: true,
+          dots: true,
+          dotsSpeed: 400,
 
+        },
+        600: {
+          items: 1,
+          margin: 0,
+          touchDrag: true,
+          mouseDrag: true,
+          dots: true,
+          dotsSpeed: 500,
+ 
+        },
+        1000: {
+          items: 1,
+          margin: 0,
+          touchDrag: true,
+          mouseDrag: true,
+          pullDrag: true,
+          dots: true,
+        }
+      }
+    });
+    
+    const heroVideo = heroSlider.find('.hero-video')[0];
+    
+    if (heroVideo) {
+      // Listen for video ended event
+      heroVideo.addEventListener('ended', () => {
+        console.log('Video ended - advancing to next slide');
+        videoHasPlayed = true;
+        heroSlider.trigger('next.owl.carousel');
+        
+        // Start autoplay cho các slides sau
+        setTimeout(() => {
+          heroSlider.trigger('play.owl.autoplay', [6000]);
+        }, 1000);
+      });
+      
+      
+      // Listen for video error
+      heroVideo.addEventListener('error', (e) => {
+        console.log('Video error - advancing to next slide:', e);
+        setTimeout(() => {
+          heroSlider.trigger('next.owl.carousel');
+        }, 2000);
+      });
+    }
+    // Hero slider progress bar functionality
+    function updateHeroProgressBar(dotIndex) {
+      const progressBar = heroSlider.find('.owl-dots');
+      
+      if (progressBar.length) {
+        // 2 slides: 0% và 100%
+        const positions = [0, 100];
+        const position = positions[dotIndex] || 0;
+        
+        // Set CSS variable and class
+        progressBar.css('--hero-active-position', position + '%');
+        progressBar[0].style.setProperty('--hero-active-position', position + '%');
+        
+        progressBar.removeClass('hero-position-0 hero-position-1');
+        progressBar.addClass(`hero-position-${dotIndex}`);
+        
+        currentHeroDotIndex = dotIndex;
+        
+        // Force repaint
+        progressBar[0].offsetHeight;
+      }
+    }
+    
+    // Monitor hero dots changes
+    function watchHeroDotsChanges() {
+      const dotsContainer = heroSlider.find('.owl-dots')[0];
+      
+      if (dotsContainer) {
+        const observer = new MutationObserver(function(mutations) {
+          mutations.forEach(function(mutation) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+              checkActiveHeroDot();
+            }
+          });
+        });
+        
+        const dots = heroSlider.find('.owl-dots .owl-dot');
+        dots.each(function(index) {
+          observer.observe(this, {
+            attributes: true,
+            attributeFilter: ['class']
+          });
+        });
+        
+        setTimeout(() => {
+          checkActiveHeroDot();
+        }, 100);
+      }
+    }
+    
+    function checkActiveHeroDot() {
+      const activeDot = heroSlider.find('.owl-dots .owl-dot.active');
+      
+      if (activeDot.length) {
+        const allDots = heroSlider.find('.owl-dots .owl-dot');
+        const activeDotIndex = allDots.index(activeDot);
+        
+        if (activeDotIndex !== -1) {
+          updateHeroProgressBar(activeDotIndex);
+        }
+      }
+    }
+    
+    // Initialize hero slider
+    heroSlider.on('initialized.owl.carousel', function(event) {
+      setTimeout(() => {
+        watchHeroDotsChanges();
+        updateHeroProgressBar(0);
+      }, 200);
+    });
+    
+    heroSlider.on('changed.owl.carousel translated.owl.carousel', function(event) {
+      setTimeout(() => {
+        checkActiveHeroDot();
+      }, 50);
+    });
+    
+    // Manual click handling for hero progress bar
+    heroSlider.find('.owl-dots').on('click', function(e) {
+      const clickX = e.offsetX || (e.originalEvent && e.originalEvent.layerX) || 0;
+      const totalWidth = $(this).width();
+      
+      if (totalWidth > 0) {
+        // 2 sections for 2 slides
+        const sectionWidth = totalWidth / 2;
+        let targetDot = Math.floor(clickX / sectionWidth);
+        targetDot = Math.max(0, Math.min(targetDot, 1)); // Clamp to 0-1
+        
+        const owlDots = heroSlider.find('.owl-dots .owl-dot');
+        if (owlDots.eq(targetDot).length) {
+          heroSlider.trigger('to.owl.carousel', [targetDot, 1000]);
+        }
+        
+        updateHeroProgressBar(targetDot);
+        if (targetDot === 0) {
+          videoHasPlayed = false;
+          heroSlider.trigger('stop.owl.autoplay');
+          if (heroVideo) {
+            heroVideo.currentTime = 0;
+            setTimeout(() => {
+              heroVideo.play().catch(e => console.log('Video replay failed:', e));
+            }, 500);
+          }
+        }
+      }
+    });
+    
+    // Auto-play video when slide changes to video
+    heroSlider.on('changed.owl.carousel', function(event) {
+      const currentSlide = event.item.index;
+      if (currentSlide === 0) {
+        // Video slide - reset và play video
+        if (heroVideo && !videoHasPlayed) {
+          heroVideo.currentTime = 0;
+          setTimeout(() => {
+            heroVideo.play().catch(e => console.log('Video autoplay failed:', e));
+          }, 500);
+        }
+      } else {
+        // Non-video slides - pause video
+        if (heroVideo) {
+          heroVideo.pause();
+        }
+      }
+    });
+    
+    // Stop autoplay when reaching video slide
+    heroSlider.on('translated.owl.carousel', function(event) {
+      const currentSlide = event.item.index;
+      const currentSlideElement = heroSlider.find('.owl-item').eq(currentSlide);
+      const videoElement = currentSlideElement.find('.hero-video');
+      
+      if (videoElement.length) {
+        // Stop autoplay when video slide is active
+        heroSlider.trigger('stop.owl.autoplay');
+        
+        // Resume autoplay after video duration or user interaction
+        setTimeout(() => {
+          if (!videoElement[0].paused) {
+            heroSlider.trigger('play.owl.autoplay', [6000]);
+          }
+        }, 8000); // Resume after 8 seconds
+      }
+    });
+  }
+});
 // Cập nhật khi resize
 $(window).resize(updateMenuOverlay);
 $(document).ready(updateMenuOverlay);
@@ -410,10 +634,9 @@ $(window).resize(function() {
     
     var $this = $(this);
     if ($('body').hasClass('menu-open')) {
-    
+
       $this.removeClass('open');
       $('.js-site-navbar').fadeOut(400);
-      
       const bodyTop = $('body').css('top');
       let scrollY = 0;
       
@@ -443,7 +666,9 @@ $(window).resize(function() {
         'left': '',
         'right': ''
       });
-      
+    //   
+
+    
       if (scrollY > 0) {
         // Multiple methods to ensure scroll restoration
         window.scrollTo(0, scrollY);
@@ -491,6 +716,14 @@ $(window).resize(function() {
       $('html').addClass('menu-open');
       if (isMobile) {
         
+        // $('.lenis').css({
+        //   'position': 'fixed',
+        //   // 'top': `-${currentScroll}px`,
+        //   // 'left': '0',
+        //   // 'right': '0',
+        //   // 'width': '100%',
+        //   // 'overflow': 'hidden',
+        // });
         $('body').css({
           'position': 'fixed',
           'top': `-${currentScroll}px`, // Store scroll position
@@ -505,7 +738,6 @@ $(window).resize(function() {
           'overflow': 'hidden',
           'touch-action': 'none'
         });
-  
       } else {
         // DESKTOP: Stop Lenis and apply position
         if (typeof lenis !== 'undefined' && lenis && typeof lenis.stop === 'function') {
@@ -525,6 +757,7 @@ $(window).resize(function() {
       
     }
   });
+  
 
 // ADD: Emergency cleanup function
 function forceCleanupMenu() {
@@ -1386,7 +1619,6 @@ $(document).ready(function() {
         }
       }
     });
-    
     // Events slider event tracking
     function updateEventsProgressBar(dotIndex) {
       const progressBar = eventsSlider.find('.owl-dots');
@@ -1538,7 +1770,166 @@ $(document).ready(function() {
     
   } 
 });
+$(document).ready(function() {  
+  setTimeout(() => {
+    if (typeof Fancybox !== 'undefined') {
+      try {
+        Fancybox.destroy();
+      } catch (e) {
+        console.log('No existing Fancybox instances to destroy');
+      }
+      
+      // Initialize new instance
+      Fancybox.bind('.events-image .owl-item:not(.cloned) [data-fancybox="gallery-lounge"]', {
+        // Infinite gallery
+        infinite: true,
+        // Toolbar buttons
+        Toolbar: {
+          display: {
+            left: ["counter"],
+            middle: [],
+            right: ["slideshow", "thumbs", "close"],
+          },
+        },
+        
+        // Thumbs configuration
+        Thumbs: {
+          type: "classic",
+          autoStart: true,
+          hideOnClose: true,
+          axis: "x",
+        },
+        
+        // Image settings
+        Images: {
+          zoom: true,
+          Panzoom: {
+            wheelAction: false,      // TẮT zoom bằng scroll wheel
+            panOnlyZoomed: true,     // Chỉ cho phép pan khi đã zoom
+            wheelSpeed: 0,           // Set wheel speed = 0
+            wheel: false,         
+          }
+        },
+        contentClick: "toggleZoom",
+        backdropClick: "close",
+        hideScrollbar: false,
+        // Animation
+        showClass: "f-fadeIn",
+        hideClass: "f-fadeOut",
+        keyboard: {
+          Escape: "close",
+          Delete: "close", 
+          Backspace: "close",
+          PageUp: "prev",
+          PageDown: "next",
+          ArrowLeft: "prev",
+          ArrowRight: "next",
+        },
+        
+        // Events
+        on: {
+          // Before show
+          init: () => {
+            // dừng autoplay và chặn tương tác kéo
+            $('.owl-carousel').trigger('stop.owl.autoplay');
+            document.body.classList.add('fancybox-open');
+            const currentScroll = window.pageYOffset || 
+                                document.documentElement.scrollTop || 
+                                document.body.scrollTop || 0;
+            
+            if (isMobile) {
+              // MOBILE: Áp dụng logic giống menu mobile
+              $('body').css({
+                'position': 'fixed',
+                'top': `-${currentScroll}px`,
+                'left': '0',
+                'right': '0',
+                'width': '100%',
+                'overflow': 'hidden',
+                'touch-action': 'none',
+              });
+              $('html').css({
+                'overflow': 'hidden',
+                'touch-action': 'none'
+              });
+            } else {
+              // DESKTOP: Stop Lenis và apply position giống menu desktop
+              if (typeof lenis !== 'undefined' && lenis && typeof lenis.stop === 'function') {
+                lenis.stop();
+              }
+              
+              $('body').css({
+                'position': 'fixed',
+                'top': `-${currentScroll}px`,
+                'width': '100%'
+              });
+              $('html').css('overflow', 'hidden');
+            }
+          },
+          destroy: () => {
+            $('.owl-carousel').trigger('play.owl.autoplay');
+            document.body.classList.remove('fancybox-open');
+            const bodyTop = $('body').css('top');
+            let scrollY = 0;
+            
+            if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
+              scrollY = Math.abs(parseInt(bodyTop) || 0);
+            }
+            
+            // Fallback: sử dụng data attribute
+            if (scrollY === 0) {
+              scrollY = parseInt(document.body.getAttribute('data-fancybox-scroll-y') || '0');
+            }
+            $('body, html').css({
+              'position': '',
+              'top': '',
+              'width': '',
+              'height': '',
+              'overflow': '',
+              'overflow-x': '',
+              'overflow-y': '',
+              'touch-action': '',
+              '-webkit-overflow-scrolling': '',
+              'overscroll-behavior': '',
+              'left': '',
+              'right': ''
+            });
+            
+            // 4. KHÔI PHỤC SCROLL POSITION
+            if (scrollY > 0) {
+              // Multiple methods để đảm bảo scroll restoration
+              window.scrollTo(0, scrollY);
+              document.documentElement.scrollTop = scrollY;
+              document.body.scrollTop = scrollY;
+              
+              // Force scroll sau delay nhỏ
+              setTimeout(() => {
+                window.scrollTo(0, scrollY);
+                document.documentElement.scrollTop = scrollY;
+              }, 10);
+            }
+            
+            // 5. KHÔI PHỤC LENIS NẾU CÓ (GIỐNG MENU)
+            if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
+              setTimeout(() => {
+                try {
+                  lenis.start();
+                } catch (e) {
+                  console.log('Lenis restart failed:', e);
+                }
+              }, 100);
+            }
+          }
+        },
+      });
+    } else {
+      console.error('Fancybox not found');
+    }
+  }, 200);
+  
 
+
+});
 
 
   function initAOS() {

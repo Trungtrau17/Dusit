@@ -18,11 +18,11 @@
     <link rel="stylesheet" href="../css/owl.carousel.min.css">
     <link rel="stylesheet" href="../css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="../css/jquery.timepicker.css">
-    <link rel="stylesheet" href="../css/fancybox.min.css">
     <link rel="stylesheet" href="../fonts/ionicons/css/ionicons.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://unpkg.com/lenis@1.3.8/dist/lenis.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.0/dist/fancybox/fancybox.css"/>
     <!-- Theme Style -->
     <link rel="stylesheet" href="../css/style.css">
   </head>
@@ -89,10 +89,12 @@
       </header>
     <!-- END head -->
       <div class="menu-overlay"></div>
-      <section class="site-hero overlay">
-        <div class="container">
-          <div class="row site-hero-inner justify-content-center align-items-center" data-aos="fade-up">
-            <h4 class="heading">VIP Dining</h4>
+      <section class="site-hero">
+        <div class="hero-bg-image overlay">
+          <div class="container">
+            <div class="row site-hero-inner justify-content-center align-items-center" data-aos="fade-up">
+              <h4 class="heading">VIP Dining</h4>
+            </div>
           </div>
         </div>
       </section>
@@ -161,26 +163,18 @@
               <ul class="list-unstyled link">
                 <li><a href="https://www.facebook.com/LePalaisTuHoaHanoi">Facebook</a></li>
                 <li><a href="https://www.instagram.com/dusitlepalaistuhoahanoi/">Instagram</a></li>
-                <li><a href="#">Tiktok</a></li>
+                <li><a href="https://www.tiktok.com/@dusitlepalaistuhoahanoi?_t=ZS-8zSsIyWdZZw&_r=1">Tiktok</a></li>
               </ul>
           </div>
           <div class="get-in-touch">
             <span class="title">Get In Touch</span>
             <ul class="list-unstyled link">
-              <li><p>Address: Add: 9 Alley 431, <br>Au Co Street, Ha Noi, Viet Nam </p></li>
-              <li><p>Phone:  +84 24 3200 2222</p></li>
+              <li><p>Address: 9 Alley 431, <br>Au Co Street, Ha Noi, Viet Nam </p></li>
+              <li><p>Phone: +84 24 3200 2222</p></li>
               <li><p>Email: dphv@dusit.com</p></li>
             </ul>
           </div>
-          <div class="col-md-3 mb-5">
-            <p>Sign up for our newsletter</p>
-            <form action="https://www.dusit.com/sign-in/" class="footer-newsletter">
-              <div class="form-group">
-                <input type="email" class="form-control" placeholder="Email...">
-                <button type="submit" class="btn"><span class="fa fa-paper-plane"></span></button>
-              </div>
-            </form>
-          </div>
+          
         </div>
         
         <div class="row pt-5">
@@ -197,16 +191,16 @@
     <script src="../js/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/owl.carousel.min.js"></script>
-    <script src="../js/jquery.fancybox.min.js"></script>
     <script src="../js/bootstrap-datepicker.js"></script> 
     <script src="../js/jquery.timepicker.min.js"></script> 
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="https://unpkg.com/lenis@1.3.7/dist/lenis.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.0/dist/fancybox/fancybox.umd.js"></script>
     <script src="../js/main.js"></script>
     </div>
     <style>
-      body.about-page .site-hero {
+      body.about-page .site-hero .hero-bg-image{
         background-image: url('../images/One_bedroom_5.webp') !important; 
       }
       body.about-page .site-hero-inner {
