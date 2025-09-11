@@ -1,0 +1,17 @@
+backend:
+  name: git-gateway
+  branch: main   # Nhánh Git bạn muốn commit nội dung vào
+
+media_folder: "images/uploads" # Nơi lưu ảnh upload trong repo
+public_folder: "/images/uploads"
+
+collections:
+  - name: "pages"
+    label: "Pages"
+    files:
+      - file: "index.html"
+        label: "Home Page"
+        name: "home"
+        fields:
+          - { label: "Tiêu đề", name: "title", widget: "string" }
+          - { label: "Nội dung", name: "body", widget: "markdown" }
