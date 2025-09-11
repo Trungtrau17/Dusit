@@ -9,7 +9,7 @@ collections:
   - name: "homepage_en"
     label: "Homepage (English)"
     files:
-      - file: "en/index.html"
+      - file: "../en/index.html"
         label: "Home EN"
         name: "home_en"
         fields:
@@ -19,7 +19,7 @@ collections:
   - name: "homepage_vn"
     label: "Homepage (Vietnamese)"
     files:
-      - file: "vn/index.html"
+      - file: "../vn/index.html"
         label: "Home VN"
         name: "home_vn"
         fields:
