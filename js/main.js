@@ -1772,163 +1772,162 @@ $(document).ready(function() {
 });
 $(document).ready(function() {  
   setTimeout(() => {
+    var eventsSlider = $('.events-slider');
+    let lastOwlIndex = null;
+    let lastScrollY = 0;
+    function getOwlIndex($img) {
+      const $owlItem = $img.closest('.owl-item');
+      if ($owlItem.length) {
+        // Chỉ tính các owl-item thực tế, không .cloned
+        const $realItems = eventsSlider.find('.owl-item:not(.cloned)');
+        return $realItems.index($owlItem);
+      }
+      return null;
+    }
+
+  // Helper: Khóa scroll trang chính
+  function lockScroll() {
+    document.body.classList.add('fancybox-open');
+    lastScrollY = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    $('body').css({
+      'position': 'fixed',
+      'top': `-${lastScrollY}px`,
+      'left': '0',
+      'right': '0',
+      'width': '100%',
+      'overflow': 'hidden',
+      'touch-action': 'none',
+    });
+    $('html').css({
+      'overflow': 'hidden',
+      'touch-action': 'none'
+    });
+    if (typeof lenis !== 'undefined' && lenis && typeof lenis.stop === 'function') {
+      lenis.stop();
+    }
+    
+  }
+
+  // Helper: Mở lại scroll trang chính
+  function unlockScroll() {
+    document.body.classList.remove('fancybox-open');
+    const bodyTop = $('body').css('top');
+    let scrollY = 0;
+    if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
+      scrollY = Math.abs(parseInt(bodyTop) || 0);
+    }
+    // Fallback: sử dụng data attribute
+    if (scrollY === 0) {
+      scrollY = parseInt(document.body.getAttribute('data-fancybox-scroll-y') || '0');
+    }
+    $('body, html').css({
+      'position': '',
+      'top': '',
+      'width': '',
+      'height': '',
+      'overflow': '',
+      'overflow-x': '',
+      'overflow-y': '',
+      'touch-action': '',
+      '-webkit-overflow-scrolling': '',
+      'overscroll-behavior': '',
+      'left': '',
+      'right': ''
+    });
+   
+    // Khôi phục scroll về vị trí cũ
+    if (lastScrollY > 0) {
+      window.scrollTo(0, lastScrollY);
+      document.documentElement.scrollTop = lastScrollY;
+      document.body.scrollTop = lastScrollY;
+      setTimeout(() => {
+        window.scrollTo(0, lastScrollY);
+        document.documentElement.scrollTop = lastScrollY;
+      }, 10);
+    }
+    if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
+      setTimeout(() => {
+        try {
+          lenis.start();
+        } catch (e) {
+          console.log('Lenis restart failed:', e);
+        }
+      }, 100);
+    }
+  }
     if (typeof Fancybox !== 'undefined') {
       try {
         Fancybox.destroy();
       } catch (e) {
         console.log('No existing Fancybox instances to destroy');
       }
-      
       // Initialize new instance
-      Fancybox.bind('.events-image .owl-item:not(.cloned) [data-fancybox="gallery-lounge"]', {
-        // Infinite gallery
-        infinite: true,
-        // Toolbar buttons
-        Toolbar: {
-          display: {
-            left: ["counter"],
-            middle: [],
-            right: ["slideshow", "thumbs", "close"],
-          },
+      eventsSlider.on('click', '.owl-item:not(.cloned) [data-fancybox="gallery-lounge"]', function(e) {
+    const $img = $(this);
+    lastOwlIndex = getOwlIndex($img);
+
+    // Fancybox v6 API
+    Fancybox.show([{
+      src: $img.attr('src'),
+      type: "image",
+      caption: $img.attr('data-caption') || $img.attr('alt') || ""
+    },
+    // Lấy các ảnh khác trong slider
+    ...eventsSlider.find('.owl-item:not(.cloned) [data-fancybox="gallery-lounge"]').not($img).map(function() {
+      return {
+        src: $(this).attr('src'),
+        type: "image",
+        caption: $(this).attr('data-caption') || $(this).attr('alt') || ""
+      };
+    }).get()
+    ], {
+      startIndex: 0, // Luôn mở từ ảnh vừa click
+      infinite: true,
+      Thumbs: {
+        type: "classic",
+        autoStart: true,
+        axis: "x"
+      },
+      Images: {
+        Panzoom: {
+          wheelAction: false
+        }
+      },
+      hideScrollbar: false,
+      contentClick: "toggleZoom",
+      backdropClick: "close",
+      Toolbar: {
+        display: {
+          left: ["counter"],
+          right: ["thumbs", "close"]
+        }
+      },
+      on: {
+        init: (fancybox) => {
+          // Dừng autoplay
+          eventsSlider.trigger('stop.owl.autoplay');
+          // Khóa scroll trang chính
+          lockScroll();
         },
-        
-        // Thumbs configuration
-        Thumbs: {
-          type: "classic",
-          autoStart: true,
-          hideOnClose: true,
-          axis: "x",
-        },
-        
-        // Image settings
-        Images: {
-          zoom: true,
-          Panzoom: {
-            wheelAction: false,      // TẮT zoom bằng scroll wheel
-            panOnlyZoomed: true,     // Chỉ cho phép pan khi đã zoom
-            wheelSpeed: 0,           // Set wheel speed = 0
-            wheel: false,         
+        destroy: (fancybox) => {
+          // Trả về đúng slide đã click
+          if (lastOwlIndex !== null) {
+            eventsSlider.trigger('to.owl.carousel', [lastOwlIndex, 0]);
+            lastOwlIndex = null;
           }
-        },
-        contentClick: "toggleZoom",
-        backdropClick: "close",
-        hideScrollbar: false,
-        // Animation
-        showClass: "f-fadeIn",
-        hideClass: "f-fadeOut",
-        keyboard: {
-          Escape: "close",
-          Delete: "close", 
-          Backspace: "close",
-          PageUp: "prev",
-          PageDown: "next",
-          ArrowLeft: "prev",
-          ArrowRight: "next",
-        },
-        
-        // Events
-        on: {
-          // Before show
-          init: () => {
-            // dừng autoplay và chặn tương tác kéo
-            $('.owl-carousel').trigger('stop.owl.autoplay');
-            document.body.classList.add('fancybox-open');
-            const currentScroll = window.pageYOffset || 
-                                document.documentElement.scrollTop || 
-                                document.body.scrollTop || 0;
-            
-            if (isMobile) {
-              // MOBILE: Áp dụng logic giống menu mobile
-              $('body').css({
-                'position': 'fixed',
-                'top': `-${currentScroll}px`,
-                'left': '0',
-                'right': '0',
-                'width': '100%',
-                'overflow': 'hidden',
-                'touch-action': 'none',
-              });
-              $('html').css({
-                'overflow': 'hidden',
-                'touch-action': 'none'
-              });
-            } else {
-              // DESKTOP: Stop Lenis và apply position giống menu desktop
-              if (typeof lenis !== 'undefined' && lenis && typeof lenis.stop === 'function') {
-                lenis.stop();
-              }
-              
-              $('body').css({
-                'position': 'fixed',
-                'top': `-${currentScroll}px`,
-                'width': '100%'
-              });
-              $('html').css('overflow', 'hidden');
-            }
-          },
-          destroy: () => {
-            $('.owl-carousel').trigger('play.owl.autoplay');
-            document.body.classList.remove('fancybox-open');
-            const bodyTop = $('body').css('top');
-            let scrollY = 0;
-            
-            if (bodyTop && bodyTop !== 'auto' && bodyTop !== '0px') {
-              scrollY = Math.abs(parseInt(bodyTop) || 0);
-            }
-            
-            // Fallback: sử dụng data attribute
-            if (scrollY === 0) {
-              scrollY = parseInt(document.body.getAttribute('data-fancybox-scroll-y') || '0');
-            }
-            $('body, html').css({
-              'position': '',
-              'top': '',
-              'width': '',
-              'height': '',
-              'overflow': '',
-              'overflow-x': '',
-              'overflow-y': '',
-              'touch-action': '',
-              '-webkit-overflow-scrolling': '',
-              'overscroll-behavior': '',
-              'left': '',
-              'right': ''
-            });
-            
-            // 4. KHÔI PHỤC SCROLL POSITION
-            if (scrollY > 0) {
-              // Multiple methods để đảm bảo scroll restoration
-              window.scrollTo(0, scrollY);
-              document.documentElement.scrollTop = scrollY;
-              document.body.scrollTop = scrollY;
-              
-              // Force scroll sau delay nhỏ
-              setTimeout(() => {
-                window.scrollTo(0, scrollY);
-                document.documentElement.scrollTop = scrollY;
-              }, 10);
-            }
-            
-            // 5. KHÔI PHỤC LENIS NẾU CÓ (GIỐNG MENU)
-            if (typeof lenis !== 'undefined' && lenis && typeof lenis.start === 'function') {
-              setTimeout(() => {
-                try {
-                  lenis.start();
-                } catch (e) {
-                  console.log('Lenis restart failed:', e);
-                }
-              }, 100);
-            }
-          }
-        },
-      });
-    } else {
-      console.error('Fancybox not found');
-    }
+          // Resume autoplay
+          eventsSlider.trigger('play.owl.autoplay');
+          // Mở lại scroll trang chính
+          unlockScroll();
+        }
+      }
+    });
+
+    e.preventDefault();
+    e.stopPropagation();
+  });
+  }
   }, 200);
-  
-
-
 });
 
 

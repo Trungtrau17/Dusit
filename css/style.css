@@ -3165,11 +3165,10 @@ h1, h2, h3, h4, h5 {
 
   .site-hero {
     width: 100vw;
-    height: 100vh;
-    min-height: 100vh;
+   height: auto;
   
   }
-  
+
   .site-hero-inner {
     height: 100vh;
   }
