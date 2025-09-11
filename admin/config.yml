@@ -1,51 +1,27 @@
 backend:
   name: git-gateway
-  branch: main   # hoặc master, tùy repo của bạn
+  branch: main   # hoặc master nếu repo bạn dùng master
 
-media_folder: "images/uploads"   # chỗ lưu ảnh trong repo
+media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
-  - name: "homepage"
-    label: "Homepage"
+  - name: "homepage_en"
+    label: "Homepage (English)"
     files:
-      - file: "index.html"
-        label: "Home Page Content"
-        name: "home"
+      - file: "en/index.html"
+        label: "Home EN"
+        name: "home_en"
         fields:
           - { label: "Hero Heading", name: "hero_heading", widget: "string" }
-          - { label: "Intro Title", name: "intro_title", widget: "string" }
           - { label: "Intro Text", name: "intro_text", widget: "text" }
-          - { label: "Collection Title", name: "collection_title", widget: "string" }
-          - { label: "Dining Title", name: "dining_title", widget: "string" }
-          - { label: "Dining Description", name: "dining_desc", widget: "text" }
-          - { label: "Wellness Title", name: "wellness_title", widget: "string" }
-          - { label: "Event Title", name: "event_title", widget: "string" }
-          - { label: "Event Description", name: "event_desc", widget: "text" }
 
-  - name: "dining"
-    label: "Dining Pages"
-    folder: "en"
-    create: true
-    extension: "html"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
-
-  - name: "wellness"
-    label: "Wellness Pages"
-    folder: "en"
-    create: true
-    extension: "html"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
-
-  - name: "events"
-    label: "Events Pages"
-    folder: "en"
-    create: true
-    extension: "html"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
+  - name: "homepage_vn"
+    label: "Homepage (Vietnamese)"
+    files:
+      - file: "vn/index.html"
+        label: "Home VN"
+        name: "home_vn"
+        fields:
+          - { label: "Hero Heading", name: "hero_heading", widget: "string" }
+          - { label: "Intro Text", name: "intro_text", widget: "text" }
