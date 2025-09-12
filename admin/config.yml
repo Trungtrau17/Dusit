@@ -1,10 +1,12 @@
 backend:
-  name: git-gateway
-  branch: master   # hoặc master nếu repo bạn dùng master
+ name: git-gateway
+ branch: main   # hoặc master nếu repo bạn dùng master
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
+site_url: "https://dusit.netlify.app"
+display_url: "https://dusit.netlify.app"
 collections:
   - name: "homepage_en"
     label: "Homepage (English)"
